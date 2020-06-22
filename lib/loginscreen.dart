@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:thedreamtop/mainscreen.dart';
+import 'package:thedreamtop/user.dart';
+import 'mainscreen2.dart';
 import 'package:thedreamtop/registerscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
@@ -195,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.white,
           ),
           Text(
-            "  TheDreamTop",
+            "TheDreamTop",
             style: TextStyle(
                 fontSize: 36, color: Colors.white, fontWeight: FontWeight.w900),
           )
@@ -204,17 +206,24 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _userLogin() {
+  void _userLogin()async {
     String email = _emailController.text;
     String password = _passController.text;
+    String email2;
 
     http.post(urlLogin, body: {
       "email": email,
       "password": password,
     }).then((res) {
       if (res.body == "success") {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
+
+        User user = new User(
+        email: email,
+        );
+
+
+         Navigator.push(context,
+            MaterialPageRoute(builder: (BuildContext context) => MainScreen(user: user)));
         Toast.show("Login success", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       } else {
