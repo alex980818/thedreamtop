@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:thedreamtop/loginscreen.dart';
+
 import 'product.dart';
 import 'productdetail.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,8 @@ class _MainScreenState extends State<MainScreen> {
   bool _visible = false;
   bool _visible1 = false;
   int curnumber = 1;
+   int _currentIndex = 0;
+   int index;
   String curr = "All";
   String titlecenter = "Loading products...";
 
@@ -209,20 +213,89 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => CartScreen(
-                              user: widget.user,
-                            )));
-              }
-            },
-            icon: Icon(Icons.add_shopping_cart),
-            label: Text("0"),
+          bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
+        onTap: (value) {
+          _currentIndex = value;
+           setState(() {
+           // _currentIndex = index;
+            switch (_currentIndex) {
+              case 0:
+                 Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => MainScreen(
+                        
+                      )));
+                break;
+              case 1:
+                 Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => CartScreen(
+                         user: widget.user,
+                      )));
+                break;
+              case 2:
+              //    Navigator.push(
+              // context,
+              // MaterialPageRoute(
+              //     builder: (BuildContext context) => CartScreen(
+                        
+              //         )));
+                break;
+            }
+          });
+        },
+       
+        items: [
+          
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.indigo,
+            ),
+            title: Text(
+              'Home',
+              style: TextStyle(color: Colors.blue),
+            ),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite_border,
+              color: Colors.indigo,
+            ),
+            title: Text(
+              'Wishlist',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                color: Colors.indigo,
+              ),
+              title: Text(
+                'Account',
+                style: TextStyle(color: Colors.blue),
+              )),
+        ],
+      ),
+          // floatingActionButton: FloatingActionButton.extended(
+          //   onPressed: () {
+          //     {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //               builder: (BuildContext context) => CartScreen(
+          //                     user: widget.user,
+          //                   )));
+          //     }
+          //   },
+          //   icon: Icon(Icons.add_shopping_cart),
+          //   label: Text("0"),
+          // ),
         ));
   }
 
@@ -383,7 +456,7 @@ class _MainScreenState extends State<MainScreen> {
                                     color: Colors.blueGrey[900],
                                   ),
                                   Text(
-                                    "All",
+                                    "Recent",
                                     style:
                                         TextStyle(color: Colors.blueGrey[900]),
                                   ),
@@ -404,9 +477,9 @@ class _MainScreenState extends State<MainScreen> {
                                 // Replace with a Row for horizontal icon + text
                                 children: <Widget>[
                                   Image.asset(
-                                    'assets/images/ray-ban.png',
-                                    width: 50,
-                                    height: 25,
+                                    'assets/images/asus.png',
+                                    width: 55,
+                                    height: 35,
                                   ),
                                   Text(
                                     "Asus",
@@ -431,9 +504,9 @@ class _MainScreenState extends State<MainScreen> {
                                 // Replace with a Row for horizontal icon + text
                                 children: <Widget>[
                                   Image.asset(
-                                    'assets/images/quay_australia.jpg',
-                                    width: 120,
-                                    height: 25,
+                                    'assets/images/acer.png',
+                                    width: 55,
+                                    height: 35,
                                   ),
                                   Text(
                                     "Acer",
@@ -500,184 +573,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
               ),
-              Card(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Container(
-                              width: 80,
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Text(
-                                    "Shape",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItembyShape("All"),
-                              color: Colors.blue[100],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Icon(
-                                    MdiIcons.update,
-                                    color: Colors.blueGrey[900],
-                                  ),
-                                  Text(
-                                    "All",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey[900]),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItembyShape("Square"),
-                              color: Colors.blue[100],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/images/square.png',
-                                    width: 50,
-                                    height: 25,
-                                  ),
-                                  Text(
-                                    "Square",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey[900]),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItembyShape("Round"),
-                              color: Colors.blue[100],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/images/round.png',
-                                    width: 50,
-                                    height: 25,
-                                  ),
-                                  Text(
-                                    "Round",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey[900]),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItembyShape("Aviator"),
-                              color: Colors.blue[100],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/images/aviator.png',
-                                    width: 50,
-                                    height: 25,
-                                  ),
-                                  Text(
-                                    "Aviator",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey[900]),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItembyShape("Oval"),
-                              color: Colors.blue[100],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/images/oval.png',
-                                    width: 50,
-                                    height: 25,
-                                  ),
-                                  Text(
-                                    "Oval",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey[900]),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItembyShape("Other"),
-                              color: Colors.blue[100],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Icon(
-                                    MdiIcons.more,
-                                    color: Colors.blueGrey[900],
-                                  ),
-                                  Text(
-                                    "Others",
-                                    style:
-                                        TextStyle(color: Colors.blueGrey[900]),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              
             ],
           ),
         ));
@@ -813,6 +709,8 @@ class _MainScreenState extends State<MainScreen> {
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     }
   }
+
+  
 
   Future<bool> _onBackPressed() {
     return showDialog(

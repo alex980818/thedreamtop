@@ -221,152 +221,154 @@ class _ProductDetailState extends State<ProductDetail> {
                 ))));
   }
 
-  void _addCart() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(
-            builder: (context, newSetState) {
-              return AlertDialog(
-                title: new Text("Add " + widget.product.model + " to Cart?"),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      "Select quantity of product",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+     void _addCart() {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, newSetState) {
+                  return AlertDialog(
+                    title: new Text("Add " + widget.product.model + " to Cart?"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+                        Text(
+                          "Select quantity of product",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            FlatButton(
-                              onPressed: () => {
-                                newSetState(() {
-                                  if (quantity > 1) {
-                                    quantity--;
-                                  }
-                                })
-                              },
-                              child: Icon(
-                                MdiIcons.minus,
-                                color: Color.fromRGBO(101, 255, 218, 50),
-                              ),
-                            ),
-                            Text(
-                              quantity.toString(),
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                            FlatButton(
-                              onPressed: () => {
-                                newSetState(() {
-                                  if (quantity <
-                                      (int.parse(widget.product.quantity) -
-                                          8)) {
-                                    quantity++;
-                                  } else {
-                                    Toast.show(
-                                        "Quantity not available", context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.BOTTOM);
-                                  }
-                                })
-                              },
-                              child: Icon(
-                                MdiIcons.plus,
-                                color: Color.fromRGBO(101, 255, 218, 50),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                FlatButton(
+                                  onPressed: () => {
+                                    newSetState(() {
+                                      if (quantity > 1) {
+                                        quantity--;
+                                      }
+                                    })
+                                  },
+                                  child: Icon(
+                                    MdiIcons.minus,
+                                    color: Color.fromRGBO(101, 255, 218, 50),
+                                  ),
+                                ),
+                                Text(
+                                  quantity.toString(),
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                FlatButton(
+                                  onPressed: () => {
+                                    newSetState(() {
+                                      if (quantity <
+                                          (int.parse(widget.product.quantity)-2)) {
+                                        quantity++;
+                                      } else {
+                                        Toast.show(
+                                            "Quantity not available", context,
+                                            duration: Toast.LENGTH_LONG,
+                                            gravity: Toast.BOTTOM);
+                                      }
+                                    })
+                                  },
+                                  child: Icon(
+                                    MdiIcons.plus,
+                                    color: Color.fromRGBO(101, 255, 218, 50),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
+                        )
                       ],
-                    )
-                  ],
-                ),
-                actions: <Widget>[
-                  MaterialButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                        _addtoCart();
-                      },
-                      child: Text(
-                        "Yes",
-                        style: TextStyle(
-                          color: Color.fromRGBO(101, 255, 218, 50),
-                        ),
-                      )),
-                  MaterialButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(
-                          color: Color.fromRGBO(101, 255, 218, 50),
-                        ),
-                      )),
-                ],
+                    ),
+                    actions: <Widget>[
+                      MaterialButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                            _addtoCart();
+                          },
+                          child: Text(
+                            "Yes",
+                            style: TextStyle(
+                              color: Color.fromRGBO(101, 255, 218, 50),
+                            ),
+                          )),
+                      MaterialButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Color.fromRGBO(101, 255, 218, 50),
+                            ),
+                          )),
+                    ],
+                  );
+                },
               );
-            },
-          );
-        });
-  }
-
-  void _addtoCart() {
-    try {
-      int cquantity = int.parse(widget.product.quantity);
-      print("cart quantity $cquantity");
-      print("code= "+widget.product.code);
-      print("email= "+widget.user.email);
-      if (cquantity > 0) {
-        ProgressDialog pr = new ProgressDialog(context,
-            type: ProgressDialogType.Normal, isDismissible: true);
-        pr.style(message: "Add to cart...");
-        pr.show();
-        String urlLoadJobs =
-            "http://justforlhdb.com/thedreamtop/php/insert_product.php";
-        http.post(urlLoadJobs, body: {
-          "email": widget.user.email,
-          "codeno": widget.product.code,
-          "quantity": quantity.toString(),
-        }).then((res) {
-          print("res.body = "+res.body);
-          if (res.body == "failed") {
-            Toast.show("Failed add to cart", context,
-                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-            pr.dismiss();
-            return;
-          } else {
-            print("aaa");
-            List respond = res.body.split(",");
-            print("bbb = "+res.body);
-            setState(() {
-              cartquantity = respond[1];
             });
-            print("ccc");
-            Toast.show("Success add to cart", context,
+      }
+
+
+   void _addtoCart() {
+        try {
+          int cquantity = int.parse(widget.product.quantity);
+          print("cartquantity = $cquantity");
+          print("quantity = $quantity");
+          print("product code = "+widget.product.code);
+          print("email = "+widget.user.email);
+          if (cquantity > 0) {
+            ProgressDialog pr = new ProgressDialog(context,
+                type: ProgressDialogType.Normal, isDismissible: true);
+            pr.style(message: "Add to cart...");
+            pr.show();
+            String urlLoadJobs =
+                "http://justforlhdb.com/thedreamtop/php/insert_product.php";
+            http.post(urlLoadJobs, body: {
+              "email": widget.user.email,
+              "codeno": widget.product.code,
+              "quantity": quantity.toString(),
+            }).then((res) {
+              print("res.body = "+res.body);
+              if (res.body == "failed") {
+                Toast.show(res.body, context,
+                    duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                print(res.body);
+                pr.dismiss();
+                return;
+              } else {
+                List respond = res.body.split(",");
+                setState(() {
+                  cartquantity = respond[1];
+                });
+                Toast.show(res.body, context,
+                    duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                print(res.body);
+              }
+              pr.dismiss();
+            }).catchError((err) {
+              print(err);
+              pr.dismiss();
+            });
+            pr.dismiss();
+          } else {
+            Toast.show("Out of stock", context,
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           }
-          pr.dismiss();
-        }).catchError((err) {
-          print(err);
-          pr.dismiss();
-        });
-        pr.dismiss();
-      } else {
-        Toast.show("Out of stock", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-      }
-    } catch (e) {
-      Toast.show("Failed add to cart", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    }
+        } catch (e) {
+          Toast.show("Failed add to cart", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        }
+      
+      
   }
 
   Future<bool> _onBackPressAppBar() async {

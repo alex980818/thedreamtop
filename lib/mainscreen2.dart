@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen2> {
     super.initState();
     _loadData();
     _loadCartQuantity();
-    if (widget.user.email == "admin@justforlhdb.com") {
+    if (widget.user.email == "admin@gjustforlhdb.com") {
       _isadmin = true;
     }
   }
@@ -121,7 +121,7 @@ class _MainScreenState extends State<MainScreen2> {
                                 Column(
                                   children: <Widget>[
                                     FlatButton(
-                                        onPressed: () => _sortItem("Drink"),
+                                        onPressed: () => _sortItem("Asus"),
                                         color:
                                             Color.fromRGBO(101, 255, 218, 50),
                                         padding: EdgeInsets.all(10.0),
@@ -133,7 +133,7 @@ class _MainScreenState extends State<MainScreen2> {
                                               color: Colors.black,
                                             ),
                                             Text(
-                                              "Drink",
+                                              "Asus",
                                               style: TextStyle(
                                                   color: Colors.black),
                                             )
@@ -147,7 +147,7 @@ class _MainScreenState extends State<MainScreen2> {
                                 Column(
                                   children: <Widget>[
                                     FlatButton(
-                                        onPressed: () => _sortItem("Grocery"),
+                                        onPressed: () => _sortItem("Acer"),
                                         color:
                                             Color.fromRGBO(101, 255, 218, 50),
                                         padding: EdgeInsets.all(10.0),
@@ -159,7 +159,7 @@ class _MainScreenState extends State<MainScreen2> {
                                               color: Colors.black,
                                             ),
                                             Text(
-                                              "Grocery",
+                                              "Acer",
                                               style: TextStyle(
                                                   color: Colors.black),
                                             )
@@ -197,185 +197,8 @@ class _MainScreenState extends State<MainScreen2> {
                                 SizedBox(
                                   width: 3,
                                 ),
-                                Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => _sortItem("Baby"),
-                                        color:
-                                            Color.fromRGBO(101, 255, 218, 50),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          // Replace with a Row for horizontal icon + text
-                                          children: <Widget>[
-                                            Icon(
-                                              MdiIcons.babyBottle,
-                                              color: Colors.black,
-                                            ),
-                                            Text(
-                                              "Baby",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => _sortItem("Household"),
-                                        color:
-                                            Color.fromRGBO(101, 255, 218, 50),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          // Replace with a Row for horizontal icon + text
-                                          children: <Widget>[
-                                            Icon(
-                                              MdiIcons.homeAutomation,
-                                              color: Colors.black,
-                                            ),
-                                            Text(
-                                              "Household",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => _sortItem("Vegetable"),
-                                        color:
-                                            Color.fromRGBO(101, 255, 218, 50),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          // Replace with a Row for horizontal icon + text
-                                          children: <Widget>[
-                                            Icon(
-                                              MdiIcons.foodApple,
-                                              color: Colors.black,
-                                            ),
-                                            Text(
-                                              "Vegetable",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => _sortItem("Meat"),
-                                        color:
-                                            Color.fromRGBO(101, 255, 218, 50),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          // Replace with a Row for horizontal icon + text
-                                          children: <Widget>[
-                                            Icon(
-                                              MdiIcons.fish,
-                                              color: Colors.black,
-                                            ),
-                                            Text(
-                                              "Fish&Meat",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => _sortItem("Pet"),
-                                        color:
-                                            Color.fromRGBO(101, 255, 218, 50),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          // Replace with a Row for horizontal icon + text
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.pets,
-                                              color: Colors.black,
-                                            ),
-                                            Text(
-                                              "Pet",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => _sortItem("Bread"),
-                                        color:
-                                            Color.fromRGBO(101, 255, 218, 50),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          // Replace with a Row for horizontal icon + text
-                                          children: <Widget>[
-                                            Icon(
-                                              MdiIcons.breadSlice,
-                                              color: Colors.black,
-                                            ),
-                                            Text(
-                                              "Bread",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                        onPressed: () => _sortItem("Others"),
-                                        color:
-                                            Color.fromRGBO(101, 255, 218, 50),
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          // Replace with a Row for horizontal icon + text
-                                          children: <Widget>[
-                                            Icon(
-                                              MdiIcons.ornament,
-                                              color: Colors.black,
-                                            ),
-                                            Text(
-                                              "Others",
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        )),
-                                  ],
-                                ),
+                                
+                                
                               ],
                             ),
                           ))),
@@ -459,7 +282,7 @@ class _MainScreenState extends State<MainScreen2> {
                                                     child: CachedNetworkImage(
                                                   fit: BoxFit.fill,
                                                   imageUrl: server +
-                                                      "/productimage/${productdata[index]['codeno']}.jpg",
+                                                      "/productimage/${productdata[index]['code']}.jpg",
                                                   placeholder: (context, url) =>
                                                       new CircularProgressIndicator(),
                                                   errorWidget:
@@ -526,7 +349,7 @@ class _MainScreenState extends State<MainScreen2> {
                 Toast.show("Please register to use this function", context,
                     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                 return;
-              } else if (widget.user.email == "admin@justforlhdb.com") {
+              } else if (widget.user.email == "admin@grocery.com") {
                 Toast.show("Admin mode!!!", context,
                     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                 return;
@@ -575,7 +398,7 @@ class _MainScreenState extends State<MainScreen2> {
                           image: DecorationImage(
                               fit: BoxFit.scaleDown,
                               image: NetworkImage(server +
-                                  "/productimage/${productdata[index]['codeno']}.jpg")))),
+                                  "/productimage/${productdata[index]['id']}.jpg")))),
                 ],
               ),
             ));
@@ -584,8 +407,9 @@ class _MainScreenState extends State<MainScreen2> {
   }
 
   void _loadData() async {
-    String urlLoadJobs = server + "/php/load_products.php";
+    String urlLoadJobs = server + "/php/load_data.php";
     await http.post(urlLoadJobs, body: {}).then((res) {
+      print("resbody "+res.body);
       if (res.body == "nodata") {
         cartquantity = "0";
         titlecenter = "No product found";
@@ -769,12 +593,12 @@ class _MainScreenState extends State<MainScreen2> {
   }
 
   _addtocartdialog(int index) {
-    if (widget.user.email == "unregistered@justforlhdb.com") {
+    if (widget.user.email == "unregistered@grocery.com") {
       Toast.show("Please register to use this function", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-    if (widget.user.email == "admin@justforlhdb.com") {
+    if (widget.user.email == "admin@grocery.com") {
       Toast.show("Admin Mode!!!", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
@@ -881,12 +705,12 @@ class _MainScreenState extends State<MainScreen2> {
   }
 
   void _addtoCart(int index) {
-    if (widget.user.email == "unregistered@justforlhdb.com") {
+    if (widget.user.email == "unregistered@grocery.com") {
       Toast.show("Please register first", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-    if (widget.user.email == "admin@justforlhdb.com") {
+    if (widget.user.email == "admin@grocery.com") {
       Toast.show("Admin mode", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
@@ -944,7 +768,7 @@ class _MainScreenState extends State<MainScreen2> {
           type: ProgressDialogType.Normal, isDismissible: true);
       pr.style(message: "Searching...");
       pr.show();
-      String urlLoadJobs = server + "/php/load_data.php";
+      String urlLoadJobs = server + "/php/load_products.php";
       http.post(urlLoadJobs, body: {
         "type": type,
       }).then((res) {
@@ -982,7 +806,7 @@ class _MainScreenState extends State<MainScreen2> {
           type: ProgressDialogType.Normal, isDismissible: true);
       pr.style(message: "Searching...");
       pr.show();
-      String urlLoadJobs = server + "/php/load_data.php";
+      String urlLoadJobs = server + "/php/load_products.php";
       http
           .post(urlLoadJobs, body: {
             "name": prname.toString(),
@@ -1033,7 +857,7 @@ class _MainScreenState extends State<MainScreen2> {
       Toast.show("Please register to use this function", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
-    } else if (widget.user.email == "admin@justforlhdb.com") {
+    } else if (widget.user.email == "admin@grocery.com") {
       Toast.show("Admin mode!!!", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;

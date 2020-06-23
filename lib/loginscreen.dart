@@ -7,6 +7,7 @@ import 'package:thedreamtop/registerscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 void main() => runApp(LoginScreen());
 bool rememberMe = false;
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     //print("Hello i'm in INITSTATE");
-    loadPref();
+    this.loadPref();
   }
 
   @override
@@ -206,34 +207,53 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _userLogin()async {
-    String email = _emailController.text;
-    String password = _passController.text;
-    String email2;
-
-    http.post(urlLogin, body: {
-      "email": email,
-      "password": password,
-    }).then((res) {
-      if (res.body == "success") {
-
-        User user = new User(
-        email: email,
-        );
-
-
-         Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) => MainScreen(user: user)));
-        Toast.show("Login success", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-      } else {
-        Toast.show("Login failed", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-      }
-    }).catchError((err) {
-      print(err);
-    });
+  void _userLogin() async {
+    try {
+      ProgressDialog pr = new ProgressDialog(context,
+          type: ProgressDialogType.Normal, isDismissible: false);
+      pr.style(message: "Log in...");
+      pr.show();
+      String _email = _emailController.text;
+      String _password = _passController.text;
+      http.post(urlLogin, body: {
+        "email": _email,
+        "password": _password,
+      })
+          //.timeout(const Duration(seconds: 4))
+          .then((res) {
+        print(res.body);
+        var string = res.body;
+        List userdata = string.split(",");
+        if (userdata[0] == "success") {
+          User _user = new User(
+              name: userdata[1],
+              email: _email,
+              password: _password,
+              phone: userdata[3],
+              credit: userdata[4],
+              quantity: userdata[5]);
+          pr.dismiss();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => MainScreen(
+                        user: _user,
+                      )));
+        } else {
+          pr.dismiss();
+          Toast.show("Login failed", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        }
+      }).catchError((err) {
+        print(err);
+        pr.dismiss();
+      });
+    } on Exception catch (_) {
+      Toast.show("Error", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    }
   }
+
 
   void _registerUser() {
     Navigator.push(context,

@@ -583,7 +583,7 @@ class _CartScreenState extends State<CartScreen> {
       print(res.body);
       pr.dismiss();
       if (res.body == "Cart Empty") {
-        Navigator.of(context).pop(false);
+        //Navigator.of(context).pop(false);
         widget.user.quantity = "0";
         print("Cart Empty");
         Navigator.push(
