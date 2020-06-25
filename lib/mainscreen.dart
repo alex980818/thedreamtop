@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'package:thedreamtop/loginscreen.dart';
-
 import 'product.dart';
 import 'productdetail.dart';
 import 'package:flutter/material.dart';
 import 'user.dart';
 import 'cartscreen.dart';
+import 'profilescreen.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:toast/toast.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MainScreen extends StatefulWidget {
@@ -27,9 +27,9 @@ class _MainScreenState extends State<MainScreen> {
   bool _visible = false;
   bool _visible1 = false;
   int curnumber = 1;
-   int _currentIndex = 0;
-   int index;
-  String curr = "All";
+  int _currentIndex = 0;
+  int index;
+  String curr = "Recent";
   String titlecenter = "Loading products...";
 
   @override
@@ -91,15 +91,19 @@ class _MainScreenState extends State<MainScreen> {
                 searchProduct(),
                 sortProduct(),
                 Container(
-                  //width: 50,
-                  height: 40,
-                  color: Colors.yellow[100],
-                  child: Center(
-                    child: Text(curr,
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black)),
+                  height: 180.0,
+                  child: new Carousel(
+                    boxFit: BoxFit.cover,
+                    images: [
+                      AssetImage('assets/images/1.jpg'),
+                      AssetImage('assets/images/2.jpg'),
+                      AssetImage('assets/images/3.jpg'),
+                      AssetImage('assets/images/4.jpg'),
+                    ],
+                    autoplay: false,
+                    animationCurve: Curves.fastOutSlowIn,
+                    animationDuration: Duration(milliseconds: 1000),
+                    dotSize: 4.0,
                   ),
                 ),
                 productdata == null
@@ -182,9 +186,9 @@ class _MainScreenState extends State<MainScreen> {
                                                 Text(
                                                   productdata[index]['model'],
                                                   textAlign: TextAlign.center,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                    
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -192,12 +196,10 @@ class _MainScreenState extends State<MainScreen> {
                                                 SizedBox(
                                                   height: 10,
                                                 ),
-                               
                                                 Text(
                                                   "RM " +
                                                       productdata[index]
                                                           ['price'],
-                                                  
                                                   style: TextStyle(
                                                       color: Colors.red,
                                                       fontSize: 16,
@@ -214,88 +216,79 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: (value) {
-          _currentIndex = value;
-           setState(() {
-           // _currentIndex = index;
-            switch (_currentIndex) {
-              case 0:
-                 Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => MainScreen(
-                        
-                      )));
-                break;
-              case 1:
-                 Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => CartScreen(
-                         user: widget.user,
-                      )));
-                break;
-              case 2:
-              //    Navigator.push(
-              // context,
-              // MaterialPageRoute(
-              //     builder: (BuildContext context) => CartScreen(
-                        
-              //         )));
-                break;
-            }
-          });
-        },
-       
-        items: [
-          
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: Colors.indigo,
-            ),
-            title: Text(
-              'Home',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite_border,
-              color: Colors.indigo,
-            ),
-            title: Text(
-              'Wishlist',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                color: Colors.indigo,
+            currentIndex: _currentIndex,
+            type: BottomNavigationBarType.fixed,
+            onTap: (value) {
+              _currentIndex = value;
+              setState(() {
+                // _currentIndex = index;
+                switch (_currentIndex) {
+                  case 0:
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MainScreen()));
+                    break;
+                  case 1:
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => CartScreen(
+                                  user: widget.user,
+                                )));
+                    break;
+                  case 2:
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => ProfileScreen(
+                                  user: widget.user,
+                                )));
+                    break;
+                }
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'Home',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-              title: Text(
-                'Account',
-                style: TextStyle(color: Colors.blue),
-              )),
-        ],
-      ),
-          // floatingActionButton: FloatingActionButton.extended(
-          //   onPressed: () {
-          //     {
-          //       Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //               builder: (BuildContext context) => CartScreen(
-          //                     user: widget.user,
-          //                   )));
-          //     }
-          //   },
-          //   icon: Icon(Icons.add_shopping_cart),
-          //   label: Text("0"),
-          // ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'My Cart',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  ),
+                  title: Text(
+                    'Profile',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+            ],
+          ),
         ));
   }
 
@@ -426,26 +419,8 @@ class _MainScreenState extends State<MainScreen> {
                     children: <Widget>[
                       Column(
                         children: <Widget>[
-                          Container(
-                              width: 80,
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Text(
-                                    "Brand",
-                                    style: TextStyle(color: Colors.black),
-                                  )
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
                           FlatButton(
-                              onPressed: () => _sortItembyBrand("All"),
+                              onPressed: () => _sortItembyBrand("Recent"),
                               color: Colors.blue[100],
                               padding: EdgeInsets.all(10.0),
                               child: Column(
@@ -478,8 +453,8 @@ class _MainScreenState extends State<MainScreen> {
                                 children: <Widget>[
                                   Image.asset(
                                     'assets/images/asus.png',
-                                    width: 55,
-                                    height: 35,
+                                    width: 100,
+                                    height: 25,
                                   ),
                                   Text(
                                     "Asus",
@@ -496,8 +471,7 @@ class _MainScreenState extends State<MainScreen> {
                       Column(
                         children: <Widget>[
                           FlatButton(
-                              onPressed: () =>
-                                  _sortItembyBrand("Acer"),
+                              onPressed: () => _sortItembyBrand("Acer"),
                               color: Colors.blue[100],
                               padding: EdgeInsets.all(10.0),
                               child: Column(
@@ -505,8 +479,8 @@ class _MainScreenState extends State<MainScreen> {
                                 children: <Widget>[
                                   Image.asset(
                                     'assets/images/acer.png',
-                                    width: 55,
-                                    height: 35,
+                                    width: 100,
+                                    height: 25,
                                   ),
                                   Text(
                                     "Acer",
@@ -523,20 +497,19 @@ class _MainScreenState extends State<MainScreen> {
                       Column(
                         children: <Widget>[
                           FlatButton(
-                              onPressed: () =>
-                                  _sortItembyBrand("Blanc & Eclare"),
+                              onPressed: () => _sortItembyBrand("Lenovo"),
                               color: Colors.blue[100],
                               padding: EdgeInsets.all(10.0),
                               child: Column(
                                 // Replace with a Row for horizontal icon + text
                                 children: <Widget>[
                                   Image.asset(
-                                    'assets/images/blanc&eclare.jpg',
+                                    'assets/images/lenovo.png',
                                     width: 100,
                                     height: 25,
                                   ),
                                   Text(
-                                    "Blanc & Eclare",
+                                    "Lenovo",
                                     style:
                                         TextStyle(color: Colors.blueGrey[900]),
                                   ),
@@ -550,18 +523,19 @@ class _MainScreenState extends State<MainScreen> {
                       Column(
                         children: <Widget>[
                           FlatButton(
-                              onPressed: () => _sortItembyBrand("Other"),
+                              onPressed: () => _sortItembyBrand("HP"),
                               color: Colors.blue[100],
                               padding: EdgeInsets.all(10.0),
                               child: Column(
                                 // Replace with a Row for horizontal icon + text
                                 children: <Widget>[
-                                  Icon(
-                                    MdiIcons.more,
-                                    color: Colors.blueGrey[900],
+                                  Image.asset(
+                                    'assets/images/hp.png',
+                                    width: 100,
+                                    height: 25,
                                   ),
                                   Text(
-                                    "Others",
+                                    "HP",
                                     style:
                                         TextStyle(color: Colors.blueGrey[900]),
                                   ),
@@ -573,7 +547,6 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
               ),
-              
             ],
           ),
         ));
@@ -592,35 +565,6 @@ class _MainScreenState extends State<MainScreen> {
       }).then((res) {
         setState(() {
           curr = brand;
-          var extractdata = json.decode(res.body);
-          productdata = extractdata["products"];
-          FocusScope.of(context).requestFocus(new FocusNode());
-          pr.dismiss();
-        });
-      }).catchError((err) {
-        print(err);
-        pr.dismiss();
-      });
-      pr.dismiss();
-    } catch (e) {
-      Toast.show("Error", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    }
-  }
-
-  void _sortItembyShape(String shape) {
-    try {
-      ProgressDialog pr = new ProgressDialog(context,
-          type: ProgressDialogType.Normal, isDismissible: false);
-      pr.style(message: "Searching...");
-      pr.show();
-      String urlLoadJobs =
-          "http://justforlhdb.com/thedreamtop/php/load_data.php";
-      http.post(urlLoadJobs, body: {
-        "shape": shape,
-      }).then((res) {
-        setState(() {
-          curr = shape;
           var extractdata = json.decode(res.body);
           productdata = extractdata["products"];
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -672,45 +616,31 @@ class _MainScreenState extends State<MainScreen> {
 
   void _searchItembyName(String productname) {
     try {
-      print(productname);
       ProgressDialog pr = new ProgressDialog(context,
           type: ProgressDialogType.Normal, isDismissible: false);
       pr.style(message: "Searching...");
       pr.show();
       String urlLoadJobs =
-          "http://justforlhdb.com/thedreamtop/php/load_data.php";
-      http
-          .post(urlLoadJobs, body: {
-            "name": productname.toString(),
-          })
-          .timeout(const Duration(seconds: 4))
-          .then((res) {
-            if (res.body == "nodata") {
-              Toast.show("Product not found", context,
-                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-              pr.dismiss();
-              FocusScope.of(context).requestFocus(new FocusNode());
-              return;
-            }
-            setState(() {
-              var extractdata = json.decode(res.body);
-              productdata = extractdata["products"];
-              FocusScope.of(context).requestFocus(new FocusNode());
-              curr = productname;
-              pr.dismiss();
-            });
-          })
-          .catchError((err) {
-            pr.dismiss();
-          });
+          "https://justforlhdb.com/thedreamtop/php/load_data.php";
+      http.post(urlLoadJobs, body: {
+        "model": productname,
+      }).then((res) {
+        setState(() {
+          var extractdata = json.decode(res.body);
+          productdata = extractdata["products"];
+          FocusScope.of(context).requestFocus(new FocusNode());
+          pr.dismiss();
+        });
+      }).catchError((err) {
+        print(err);
+        pr.dismiss();
+      });
       pr.dismiss();
     } catch (e) {
       Toast.show("Error", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     }
   }
-
-  
 
   Future<bool> _onBackPressed() {
     return showDialog(

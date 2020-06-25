@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thedreamtop/loginscreen.dart';
-import 'mainscreen.dart';
-import 'mainscreen2.dart';
+// import 'mainscreen.dart';
+
 
 void main() => runApp(MyApp());
 

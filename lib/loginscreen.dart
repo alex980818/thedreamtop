@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:thedreamtop/mainscreen.dart';
 import 'package:thedreamtop/user.dart';
-import 'mainscreen2.dart';
+// import 'mainscreen2.dart';
 import 'package:thedreamtop/registerscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';

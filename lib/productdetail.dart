@@ -1,4 +1,4 @@
-//import 'dart:convert';
+// import 'dart:convert';
 
 import 'mainscreen.dart';
 import 'product.dart';
@@ -9,7 +9,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:toast/toast.dart';
-import 'user.dart';
+// import 'user.dart';
 
 void main() => runApp(ProductDetail());
 
@@ -42,7 +42,7 @@ class _ProductDetailState extends State<ProductDetail> {
             resizeToAvoidBottomPadding: false,
             appBar: AppBar(
               title: Text('Product Details'),
-              backgroundColor: Colors.blue[900],
+              backgroundColor: Colors.black,
             ),
             body: Container(
                 padding: EdgeInsets.all(20),
@@ -65,16 +65,16 @@ class _ProductDetailState extends State<ProductDetail> {
                     // GridView.count(
                     //   crossAxisCount: 10,
                     // ),
-                  //  GridView.count(
-                  //           crossAxisCount: 2,
-                  //           // childAspectRatio:
-                  //           //     (screenWidth / screenHeight) / 0.8,
-                  //           children:
-                  //               List.generate(10, (index) {
-                  //             return Container(
-                  //                 child: Card(
+                    //  GridView.count(
+                    //           crossAxisCount: 2,
+                    //           // childAspectRatio:
+                    //           //     (screenWidth / screenHeight) / 0.8,
+                    //           children:
+                    //               List.generate(10, (index) {
+                    //             return Container(
+                    //                 child: Card(
 
-                  //  ));})),
+                    //  ));})),
                     Card(
                       color: Colors.blueGrey[800],
                       elevation: 20,
@@ -221,155 +221,208 @@ class _ProductDetailState extends State<ProductDetail> {
                 ))));
   }
 
-     void _addCart() {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return StatefulBuilder(
-                builder: (context, newSetState) {
-                  return AlertDialog(
-                    title: new Text("Add " + widget.product.model + " to Cart?"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
+  void _addCart() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, newSetState) {
+              return AlertDialog(
+                title: new Text("Add " + widget.product.model + " to Cart?"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "Select quantity of product",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          "Select quantity of product",
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                FlatButton(
-                                  onPressed: () => {
-                                    newSetState(() {
-                                      if (quantity > 1) {
-                                        quantity--;
-                                      }
-                                    })
-                                  },
-                                  child: Icon(
-                                    MdiIcons.minus,
-                                    color: Color.fromRGBO(101, 255, 218, 50),
-                                  ),
-                                ),
-                                Text(
-                                  quantity.toString(),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                FlatButton(
-                                  onPressed: () => {
-                                    newSetState(() {
-                                      if (quantity <
-                                          (int.parse(widget.product.quantity)-2)) {
-                                        quantity++;
-                                      } else {
-                                        Toast.show(
-                                            "Quantity not available", context,
-                                            duration: Toast.LENGTH_LONG,
-                                            gravity: Toast.BOTTOM);
-                                      }
-                                    })
-                                  },
-                                  child: Icon(
-                                    MdiIcons.plus,
-                                    color: Color.fromRGBO(101, 255, 218, 50),
-                                  ),
-                                ),
-                              ],
+                            FlatButton(
+                              onPressed: () => {
+                                newSetState(() {
+                                  if (quantity > 1) {
+                                    quantity--;
+                                  }
+                                })
+                              },
+                              child: Icon(
+                                MdiIcons.minus,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            Text(
+                              quantity.toString(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            FlatButton(
+                              onPressed: () => {
+                                newSetState(() {
+                                  if (quantity <
+                                      (int.parse(widget.product.quantity) -
+                                          2)) {
+                                    quantity++;
+                                  } else {
+                                    Toast.show(
+                                        "Quantity not available", context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.BOTTOM);
+                                  }
+                                })
+                              },
+                              child: Icon(
+                                MdiIcons.plus,
+                                color: Colors.blue,
+                              ),
                             ),
                           ],
-                        )
+                        ),
                       ],
-                    ),
-                    actions: <Widget>[
-                      MaterialButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                            _addtoCart();
-                          },
-                          child: Text(
-                            "Yes",
-                            style: TextStyle(
-                              color: Color.fromRGBO(101, 255, 218, 50),
-                            ),
-                          )),
-                      MaterialButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                          },
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                              color: Color.fromRGBO(101, 255, 218, 50),
-                            ),
-                          )),
-                    ],
-                  );
-                },
+                    )
+                  ],
+                ),
+                actions: <Widget>[
+                  MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                        _addtoCart();
+
+                      
+                      },
+                      child: Text(
+                        "Yes",
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      )),
+                  MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      )),
+                ],
               );
-            });
-      }
-
-
-   void _addtoCart() {
-        try {
-          int cquantity = int.parse(widget.product.quantity);
-          print("cartquantity = $cquantity");
-          print("quantity = $quantity");
-          print("product code = "+widget.product.code);
-          print("email = "+widget.user.email);
-          if (cquantity > 0) {
-            ProgressDialog pr = new ProgressDialog(context,
-                type: ProgressDialogType.Normal, isDismissible: true);
-            pr.style(message: "Add to cart...");
-            pr.show();
-            String urlLoadJobs =
-                "http://justforlhdb.com/thedreamtop/php/insert_product.php";
-            http.post(urlLoadJobs, body: {
-              "email": widget.user.email,
-              "codeno": widget.product.code,
-              "quantity": quantity.toString(),
-            }).then((res) {
-              print("res.body = "+res.body);
-              if (res.body == "failed") {
-                Toast.show(res.body, context,
-                    duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                print(res.body);
-                pr.dismiss();
-                return;
-              } else {
-                List respond = res.body.split(",");
-                setState(() {
-                  cartquantity = respond[1];
-                });
-                Toast.show(res.body, context,
-                    duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                print(res.body);
-              }
-              pr.dismiss();
-            }).catchError((err) {
-              print(err);
-              pr.dismiss();
-            });
-            pr.dismiss();
-          } else {
-            Toast.show("Out of stock", context,
-                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-          }
-        } catch (e) {
-          Toast.show("Failed add to cart", context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        }
-      
-      
+            },
+          );
+        });
   }
+
+  void _addtoCart() {
+    try {
+      int cquantity = int.parse(widget.product.quantity);
+      print(cquantity);
+      print(widget.product.code);
+      print(widget.user.email);
+      if (cquantity > 0) {
+        ProgressDialog pr = new ProgressDialog(context,
+            type: ProgressDialogType.Normal, isDismissible: true);
+        pr.style(message: "Add to cart...");
+        pr.show();
+        String urlLoadJobs =
+            "https://justforlhdb.com/thedreamtop/php/insert_cart.php";
+        http.post(urlLoadJobs, body: {
+          "email": widget.user.email,
+          "code": widget.product.code,
+          "quantity": quantity.toString(),
+        }).then((res) {
+          print(res.body);
+          if (res.body == "failed") {
+            Toast.show("Failed add to cart", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            pr.hide();
+            return;
+          } else {
+            List respond = res.body.split(",");
+            setState(() {
+              cartquantity = respond[1];
+              widget.user.quantity = cartquantity;
+            });
+            Toast.show("Success add to cart", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+              Navigator.pop(context);
+          }
+          pr.hide();
+        }).catchError((err) {
+          print(err);
+          pr.hide();
+        });
+        pr.hide();
+      } else {
+        Toast.show("Out of stock", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+    } catch (e) {
+      Toast.show("Failed add to cart", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    }
+  }
+
+  //  void _addtoCart() {
+  //       try {
+  //         int cquantity = int.parse(widget.product.quantity);
+  //         print("cartquantity = $cquantity");
+  //         print("quantity = $quantity");
+  //         print("product code = "+widget.product.code);
+  //         print("email = "+widget.user.email);
+  //         if (cquantity > 0) {
+  //           ProgressDialog pr = new ProgressDialog(context,
+  //               type: ProgressDialogType.Normal, isDismissible: true);
+  //           pr.style(message: "Add to cart...");
+  //           pr.show();
+  //           String urlLoadJobs =
+  //               "http://justforlhdb.com/thedreamtop/php/insert_product.php";
+  //           http.post(urlLoadJobs, body: {
+  //             "email": widget.user.email,
+  //             "codeno": widget.product.code,
+  //             "quantity": quantity.toString(),
+  //           }).then((res) {
+  //             //print("res.body = "+res.body);
+  //             if (res.body == "failed") {
+  //               Toast.show("Failed add to cart", context,
+  //                   duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //               print(res.body);
+  //               pr.dismiss();
+  //               return;
+  //             } else {
+  //               List respond = res.body.split(",");
+  //               setState(() {
+  //                 cartquantity = respond[0];
+  //                 widget.user.quantity = cartquantity;
+  //               });
+  //               Toast.show("Success add to cart", context,
+  //                   duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //               print("resbody = "+res.body);
+  //             }
+  //             pr.dismiss();
+  //           }).catchError((err) {
+  //             print(err);
+  //             pr.dismiss();
+  //           });
+  //           pr.dismiss();
+  //         } else {
+  //           Toast.show("Out of stock", context,
+  //               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //         }
+  //       } catch (e) {
+  //         Toast.show("Failed add to cart", context,
+  //             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //       }
+
+  // }
 
   Future<bool> _onBackPressAppBar() async {
     Navigator.pop(
