@@ -4,6 +4,7 @@ import 'user.dart';
 import 'cartscreen.dart';
 import 'mainscreen.dart';
 import 'loginscreen.dart';
+import 'adminpage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -23,6 +24,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   double screenHeight, screenWidth;
   String server = "https://justforlhdb.com/thedreamtop";
   int quantity = 1;
+  bool _isadmin = false;
+
+   @override
+  void initState() {
+    super.initState();
+    if (widget.user.email == "admin@justforlhdb.com") {
+      _isadmin = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +113,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
         //         ),
         //       ]),
         // ),
+        
+        Visibility(
+          visible: _isadmin,
+          child: Column(children: <Widget>[
+            Divider(
+                  height: 2,
+                  color: Colors.white,
+                ),
+                Center(
+                  child: Text(
+                    "Admin Menu",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+
+          ],)),
+
+
+        Visibility(
+            visible: _isadmin,
+            child: Card(
+          elevation: 0,
+          
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                
+                Expanded(
+                  child: MaterialButton(
+                    height: 50,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => AdminPage(user: widget.user,)));
+                    },
+                    child: Text(
+                      'My Products',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    color: Colors.blue,
+                    elevation: 0,
+                  ),
+                ),
+              ]),
+        ),
+          ),
+
 
         Card(
           elevation: 0,

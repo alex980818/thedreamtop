@@ -1,46 +1,61 @@
+import 'dart:async';
 import 'dart:convert';
-import 'product.dart';
-import 'productdetail.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'user.dart';
-import 'cartscreen.dart';
-import 'profilescreen.dart';
 import 'package:flutter/services.dart';
+import 'editproduct.dart';
+import 'newproduct.dart';
+import 'product.dart';
+import 'user.dart';
+import 'mainscreen.dart';
+import 'profilescreen.dart';
+import 'productdetail.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:toast/toast.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'cartscreen.dart';
 
-class MainScreen extends StatefulWidget {
+// import 'package:carousel_pro/carousel_pro.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
+class AdminPage extends StatefulWidget {
   final User user;
-  //
+  final ProductDetail product;
 
-  const MainScreen({Key key, this.user}) : super(key: key);
+  const AdminPage({
+    Key key,
+    this.user,
+   this.product,
+  }) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _AdminPageState createState() => _AdminPageState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _AdminPageState extends State<AdminPage> {
   List productdata;
+  int curnumber = 1;
   double screenHeight, screenWidth;
   bool _visible = false;
   bool _visible1 = false;
-  int curnumber = 1;
   int _currentIndex = 0;
-  int index;
-  bool _isadmin = false;
-  String curr = "Recent";
+  // bool _visible2 = false;
+  String curtype = "Recent";
+  String cartquantity = "0";
+  int quantity = 1;
   String titlecenter = "Loading products...";
+  var _tapPosition;
+  String server = "https://justforlhdb.com/thedreamtop";
+  String scanPrId;
+  String curr = "Recent";
 
   @override
   void initState() {
     super.initState();
     _loadData();
-    if (widget.user.email == "admin@grocery.com") {
-      _isadmin = true;
-    }
   }
 
   @override
@@ -55,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
         child: Scaffold(
           backgroundColor: Colors.grey,
           appBar: AppBar(
-            title: Text('Products List'),
+            title: Text('Manage Products'),
             backgroundColor: Colors.black87,
             actions: <Widget>[
               IconButton(
@@ -95,22 +110,6 @@ class _MainScreenState extends State<MainScreen> {
               children: <Widget>[
                 searchProduct(),
                 sortProduct(),
-                Container(
-                  height: 180.0,
-                  child: new Carousel(
-                    boxFit: BoxFit.cover,
-                    images: [
-                      AssetImage('assets/images/1.jpg'),
-                      AssetImage('assets/images/2.jpg'),
-                      AssetImage('assets/images/3.jpg'),
-                      AssetImage('assets/images/4.jpg'),
-                    ],
-                    autoplay: false,
-                    animationCurve: Curves.fastOutSlowIn,
-                    animationDuration: Duration(milliseconds: 1),
-                    dotSize: 4.0,
-                  ),
-                ),
                 productdata == null
                     ? Flexible(
                         child: Container(
@@ -138,18 +137,8 @@ class _MainScreenState extends State<MainScreen> {
                                   child: Padding(
                                       padding: EdgeInsets.all(10),
                                       child: InkWell(
-                                        onTap: () => _onProductDetail(
-                                          productdata[index]['codeno'],
-                                          productdata[index]['brand'],
-                                          productdata[index]['model'],
-                                          productdata[index]['processor'],
-                                          productdata[index]['osystem'],
-                                          productdata[index]['graphic'],
-                                          productdata[index]['ram'],
-                                          productdata[index]['storage'],
-                                          productdata[index]['price'],
-                                          productdata[index]['quantity'],
-                                        ),
+                                        onTap: () => _showPopupMenu(index),
+                                        onTapDown: _storePosition,
                                         child: Column(
                                           children: <Widget>[
                                             GestureDetector(
@@ -202,6 +191,21 @@ class _MainScreenState extends State<MainScreen> {
                                                   height: 10,
                                                 ),
                                                 Text(
+                                                  "Quantity Left: " +
+                                                      productdata[index]
+                                                          ['quantity'],
+                                                  textAlign: TextAlign.center,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
                                                   "RM " +
                                                       productdata[index]
                                                           ['price'],
@@ -220,6 +224,26 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
+           floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        children: [
+          SpeedDialChild(
+              child: Icon(Icons.new_releases),
+              label: "New Product",
+              labelBackgroundColor: Colors.white,
+              onTap: createNewProduct),
+          SpeedDialChild(
+              child: Icon(MdiIcons.barcodeScan),
+              label: "Scan Product",
+              labelBackgroundColor: Colors.white, //_changeLocality()
+              onTap: () => scanProductDialog()),
+          SpeedDialChild(
+              child: Icon(Icons.report),
+              label: "Product Report",
+              labelBackgroundColor: Colors.white, //_changeLocality()
+              onTap: () => null),
+        ],
+      ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             type: BottomNavigationBarType.fixed,
@@ -231,9 +255,8 @@ class _MainScreenState extends State<MainScreen> {
                   case 0:
                     Navigator.push(
                         context,
-                        
                         MaterialPageRoute(
-                            builder: (BuildContext context) => MainScreen(user: widget.user,)));
+                            builder: (BuildContext context) => MainScreen(user: widget.user)));
                     break;
                   case 1:
                     Navigator.push(
@@ -298,32 +321,119 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 
-  _onImageDisplay(int index) {
+  void scanProductDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // return object of type Dialog
         return AlertDialog(
-            content: new Container(
-          height: screenWidth / 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: new Text(
+            "Select scan options:",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Container(
-                  height: screenWidth / 2,
-                  width: screenWidth / 1.5,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(25),
-                      image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.png")))),
+              MaterialButton(
+                  color: Color.fromRGBO(101, 255, 218, 50),
+                  onPressed: scanBarcodeNormal,
+                  elevation: 5,
+                  child: Text(
+                    "Bar Code",
+                    style: TextStyle(color: Colors.black),
+                  )),
+              MaterialButton(
+                  color: Color.fromRGBO(101, 255, 218, 50),
+                  onPressed: scanQR,
+                  elevation: 5,
+                  child: Text(
+                    "QR Code",
+                    style: TextStyle(color: Colors.black),
+                  )),
             ],
           ),
-        ));
+        );
       },
     );
+  }
+
+  Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      if (barcodeScanRes == "-1") {
+        scanPrId = "";
+      } else {
+        scanPrId = barcodeScanRes;
+        Navigator.of(context).pop();
+        _loadSingleProduct(scanPrId);
+      }
+    });
+  }
+
+  void _loadSingleProduct(String prid) {
+    String urlLoadJobs = server + "/php/load_products.php";
+    http.post(urlLoadJobs, body: {
+      "prid": prid,
+    }).then((res) {
+      print(res.body);
+      if (res.body == "nodata") {
+        Toast.show("Not found", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      } else {
+        setState(() {
+          var extractdata = json.decode(res.body);
+          productdata = extractdata["products"];
+          print(productdata);
+        });
+      }
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  Future<void> scanQR() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#ff6666", "Cancel", true, ScanMode.QR);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      if (barcodeScanRes == "-1") {
+        scanPrId = "";
+      } else {
+        scanPrId = barcodeScanRes;
+        Navigator.of(context).pop();
+        _loadSingleProduct(scanPrId);
+      }
+    });
   }
 
   void _loadData() async {
@@ -353,28 +463,250 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  // void _loadData() async {
-  //  //String urlLoadJobs = "https://justforlhdb.com/thedreamtop/php/load_data.php";
-  //   String urlLoadJobs =  "https://grocery.com/grocery/php/load_products.php";
-  //   print("load data");
-  //   await http.post(urlLoadJobs, body: {}).then((res) {
-  //     print("res: $res");
-  //     if (res.body == "nodata") {
-  //       titlecenter = "No product found";
-  //       setState(() {
-  //         productdata = null;
-  //       });
-  //     } else {
-  //       setState(() {
-  //         var extractdata = json.decode(res.body);
-  //         productdata = extractdata["products"];
-  //         print("productdata = $productdata");
-  //       });
-  //     }
-  //   }).catchError((err) {
-  //     print("Error $err");
-  //   });
-  // }
+  void _sortItem(String type) {
+    try {
+      ProgressDialog pr = new ProgressDialog(context,
+          type: ProgressDialogType.Normal, isDismissible: true);
+      pr.style(message: "Searching...");
+      pr.show();
+      String urlLoadJobs = server + "/php/load_products.php";
+      http.post(urlLoadJobs, body: {
+        "type": type,
+      }).then((res) {
+        if (res.body == "nodata") {
+          setState(() {
+            curtype = type;
+            titlecenter = "No product found";
+            productdata = null;
+          });
+          pr.dismiss();
+          return;
+        } else {
+          setState(() {
+            curtype = type;
+            var extractdata = json.decode(res.body);
+            productdata = extractdata["products"];
+            FocusScope.of(context).requestFocus(new FocusNode());
+            pr.dismiss();
+          });
+        }
+      }).catchError((err) {
+        print(err);
+        pr.dismiss();
+      });
+      pr.dismiss();
+    } catch (e) {
+      Toast.show("Error", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    }
+  }
+
+  void _sortItembyName(String prname) {
+    try {
+      print(prname);
+      ProgressDialog pr = new ProgressDialog(context,
+          type: ProgressDialogType.Normal, isDismissible: true);
+      pr.style(message: "Searching...");
+      pr.show();
+      String urlLoadJobs = server + "/php/load_products.php";
+      http
+          .post(urlLoadJobs, body: {
+            "name": prname.toString(),
+          })
+          .timeout(const Duration(seconds: 4))
+          .then((res) {
+            if (res.body == "nodata") {
+              Toast.show("Product not found", context,
+                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+              pr.dismiss();
+              FocusScope.of(context).requestFocus(new FocusNode());
+              return;
+            }
+            setState(() {
+              var extractdata = json.decode(res.body);
+              productdata = extractdata["products"];
+              FocusScope.of(context).requestFocus(new FocusNode());
+              curtype = prname;
+              pr.dismiss();
+            });
+          })
+          .catchError((err) {
+            pr.dismiss();
+          });
+      pr.dismiss();
+    } on TimeoutException catch (_) {
+      Toast.show("Time out", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    } on SocketException catch (_) {
+      Toast.show("Time out", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    } catch (e) {
+      Toast.show("Error", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    }
+  }
+
+  gotoCart() {
+    if (widget.user.email == "unregistered") {
+      Toast.show("Please register to use this function", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => CartScreen(
+                    user: widget.user,
+                  )));
+    }
+  }
+
+  
+
+  _onProductDetail(int index) async {
+    print("code no = "+productdata[index]['codeno']);
+    Product product = new Product(
+        code: productdata[index]['codeno'],
+      brand: productdata[index]['brand'],
+      model:productdata[index]['model'],
+      processor: productdata[index]['procecssor'],
+      osystem: productdata[index]['osystem'],
+      graphic: productdata[index]['graphic'],
+      ram: productdata[index]['ram'],
+      storage: productdata[index]['storage'],
+      price: productdata[index]['price'],
+      quantity: productdata[index]['quantity']);
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => EditProduct(
+                  user: widget.user,
+                  product: product,
+                )));
+    _loadData();
+  }
+
+  _showPopupMenu(int index) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+
+    await showMenu(
+      context: context,
+      color: Colors.white,
+      position: RelativeRect.fromRect(
+          _tapPosition & Size(40, 40), // smaller rect, the touch area
+          Offset.zero & overlay.size // Bigger rect, the entire screen
+          ),
+      items: [
+        //onLongPress: () => _showPopupMenu(), //onLongTapCard(index),
+
+        PopupMenuItem(
+          child: GestureDetector(
+              onTap: () =>
+                  {Navigator.of(context).pop(), _onProductDetail(index)},
+              child: Text(
+                "Update Product?",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              )),
+        ),
+        PopupMenuItem(
+          child: GestureDetector(
+              onTap: () =>
+                  {Navigator.of(context).pop(), _deleteProductDialog(index)},
+              child: Text(
+                "Delete Product?",
+                style: TextStyle(color: Colors.black),
+              )),
+        ),
+      ],
+      elevation: 8.0,
+    );
+  }
+
+  void _storePosition(TapDownDetails details) {
+    _tapPosition = details.globalPosition;
+  }
+
+  void _deleteProductDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: new Text(
+            "Delete Product Id " + productdata[index]['id'],
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          content:
+              new Text("Are you sure?", style: TextStyle(color: Colors.white)),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text(
+                "Yes",
+                style: TextStyle(
+                  color: Color.fromRGBO(101, 255, 218, 50),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteProduct(index);
+              },
+            ),
+            new FlatButton(
+              child: new Text(
+                "No",
+                style: TextStyle(
+                  color: Color.fromRGBO(101, 255, 218, 50),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteProduct(int index) {
+    ProgressDialog pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    pr.style(message: "Deleting product...");
+    pr.show();
+    String prid = productdata[index]['id'];
+    print("prid:" + prid);
+    http.post(server + "/php/delete_product.php", body: {
+      "prodid": prid,
+    }).then((res) {
+      print(res.body);
+      pr.dismiss();
+      if (res.body == "success") {
+        Toast.show("Delete success", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        _loadData();
+        Navigator.of(context).pop();
+      } else {
+        Toast.show("Delete failed", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+    }).catchError((err) {
+      print(err);
+      pr.dismiss();
+    });
+  }
+
+  Future<void> createNewProduct() async {
+    await Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => NewProduct()));
+    _loadData();
+  }
 
   searchProduct() {
     TextEditingController _searchController = new TextEditingController();
@@ -587,39 +919,6 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  void _onProductDetail(
-    String code,
-    String brand,
-    String model,
-    String processor,
-    String osystem,
-    String graphic,
-    String ram,
-    String storage,
-    String price,
-    String quantity,
-  ) {
-    Product product = new Product(
-      code: code,
-      brand: brand,
-      model: model,
-      processor: processor,
-      osystem: osystem,
-      graphic: graphic,
-      ram: ram,
-      storage: storage,
-      price: price,
-      quantity: quantity,
-    );
-    print(productdata);
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) =>
-                ProductDetail(product: product, user: widget.user)));
-  }
-
   void _searchItembyName(String productname) {
     try {
       ProgressDialog pr = new ProgressDialog(context,
@@ -646,6 +945,34 @@ class _MainScreenState extends State<MainScreen> {
       Toast.show("Error", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     }
+  }
+
+  _onImageDisplay(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: new Container(
+          height: screenWidth / 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  height: screenWidth / 2,
+                  width: screenWidth / 1.5,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(25),
+                      image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.png")))),
+            ],
+          ),
+        ));
+      },
+    );
   }
 
   Future<bool> _onBackPressed() {
