@@ -482,8 +482,7 @@ class _NewProductState extends State<NewProduct> {
                                                 ),
                                                 controller:
                                                     priceEditingController,
-                                                keyboardType:
-                                                    TextInputType.text,
+                                                keyboardType: TextInputType.number,
                                                 textInputAction:
                                                     TextInputAction.next,
                                                 onFieldSubmitted: (v) {
@@ -530,8 +529,7 @@ class _NewProductState extends State<NewProduct> {
                                                 ),
                                                 controller:
                                                     quantityEditingController,
-                                                keyboardType:
-                                                    TextInputType.text,
+                                               keyboardType: TextInputType.number,
                                                 textInputAction:
                                                     TextInputAction.next,
                                                 onFieldSubmitted: (v) {
@@ -564,7 +562,7 @@ class _NewProductState extends State<NewProduct> {
                                   minWidth: screenWidth / 1.5,
                                   height: 40,
                                   child: Text('Insert New Product'),
-                                  color: Colors.grey,
+                                  color: Colors.greenAccent,
                                   textColor: Colors.black,
                                   elevation: 5,
                                   onPressed: _insertNewProduct,
@@ -744,7 +742,7 @@ class _NewProductState extends State<NewProduct> {
               child: new Text(
                 "Yes",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {
@@ -756,7 +754,7 @@ class _NewProductState extends State<NewProduct> {
               child: new Text(
                 "No",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {
@@ -904,7 +902,7 @@ class _NewProductState extends State<NewProduct> {
               child: new Text(
                 "Yes",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {
@@ -920,7 +918,7 @@ class _NewProductState extends State<NewProduct> {
               child: new Text(
                 "No",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {

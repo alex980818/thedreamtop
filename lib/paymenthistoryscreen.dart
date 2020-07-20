@@ -34,7 +34,9 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
+      // backgroundColor: Colors.grey[700],
       appBar: AppBar(
         backgroundColor: Colors.black,
         
@@ -66,6 +68,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                                   padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 1),
                                   child: Card(
                                     elevation: 2,
+                                    // color: Colors.grey,
                                     child: Table(
                                       defaultColumnWidth:
                                                   FlexColumnWidth(1),
@@ -98,7 +101,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                                                         _paymentdata[index]
                                                             ['total'],
                                                     style: TextStyle(
-                                                        color: Colors.blue),
+                                                        color: Colors.grey[900]),
                                                   )),
                                             ),
                                           ],
@@ -127,7 +130,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                                                   _paymentdata[index]
                                                       ['orderid'],
                                                   style: TextStyle(
-                                                      color: Colors.blue),
+                                                      color: Colors.grey[900]),
                                                 ),
                                               ),
                                             ),
@@ -154,7 +157,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                                                 child: Text(
                                                   _paymentdata[index]['billid'],
                                                   style: TextStyle(
-                                                      color: Colors.blue),
+                                                      color: Colors.grey[900]),
                                                 ),
                                               ),
                                             ),
@@ -183,7 +186,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                                                       _paymentdata[index]
                                                           ['date'])),
                                                   style: TextStyle(
-                                                      color: Colors.blue),
+                                                      color: Colors.grey[900]),
                                                 ),
                                               ),
                                             ),

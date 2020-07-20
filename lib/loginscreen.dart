@@ -179,7 +179,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ],
+          ),
+           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //Text("Guest Mode", style: TextStyle(fontSize: 16.0)),
+              GestureDetector(
+                onTap: _unregisterUserLogin,
+                child: Text(
+                  "Guest Mode",
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                ),
+              ),
+            ],
           )
+          
         ],
       ),
     );
@@ -215,6 +229,53 @@ class _LoginScreenState extends State<LoginScreen> {
       pr.show();
       String _email = _emailController.text;
       String _password = _passController.text;
+      http.post(urlLogin, body: {
+        "email": _email,
+        "password": _password,
+      })
+          //.timeout(const Duration(seconds: 4))
+          .then((res) {
+        print(res.body);
+        var string = res.body;
+        List userdata = string.split(",");
+        if (userdata[0] == "success") {
+          User _user = new User(
+              name: userdata[1],
+              email: _email,
+              password: _password,
+              phone: userdata[3],
+              credit: userdata[4],
+              quantity: userdata[5]);
+          pr.dismiss();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => MainScreen(
+                        user: _user,
+                      )));
+        } else {
+          pr.dismiss();
+          Toast.show("Login failed", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        }
+      }).catchError((err) {
+        print(err);
+        pr.dismiss();
+      });
+    } on Exception catch (_) {
+      Toast.show("Error", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    }
+  }
+
+   void _unregisterUserLogin() async {
+    try {
+      ProgressDialog pr = new ProgressDialog(context,
+          type: ProgressDialogType.Normal, isDismissible: false);
+      pr.style(message: "Log in...");
+      pr.show();
+      String _email ="unregistered@justforlhdb.com";
+      String _password = "abc12345";
       http.post(urlLogin, body: {
         "email": _email,
         "password": _password,

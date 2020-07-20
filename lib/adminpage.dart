@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'editproduct.dart';
@@ -14,9 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:toast/toast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'cartscreen.dart';
-
 // import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -36,6 +33,7 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  GlobalKey<RefreshIndicatorState> refreshKey;
   List productdata;
   int curnumber = 1;
   double screenHeight, screenWidth;
@@ -49,13 +47,14 @@ class _AdminPageState extends State<AdminPage> {
   String titlecenter = "Loading products...";
   var _tapPosition;
   String server = "https://justforlhdb.com/thedreamtop";
-  String scanPrId;
+  String scanCode;
   String curr = "Recent";
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    refreshKey = GlobalKey<RefreshIndicatorState>();
   }
 
   @override
@@ -104,7 +103,13 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ],
           ),
-          body: Container(
+          body:  RefreshIndicator(
+            key: refreshKey,
+            color: Color.fromRGBO(101, 255, 218, 50),
+            onRefresh: () async {
+              await refreshList();
+            },
+            child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -158,7 +163,7 @@ class _AdminPageState extends State<AdminPage> {
                                                       image: DecorationImage(
                                                           fit: BoxFit.fill,
                                                           image: NetworkImage(
-                                                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.png")))),
+                                                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.jpg")))),
                                             ),
                                             Column(
                                               mainAxisAlignment:
@@ -223,7 +228,7 @@ class _AdminPageState extends State<AdminPage> {
                             })))
               ],
             ),
-          ),
+          ),),
            floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         children: [
@@ -379,19 +384,19 @@ class _AdminPageState extends State<AdminPage> {
 
     setState(() {
       if (barcodeScanRes == "-1") {
-        scanPrId = "";
+        scanCode = "";
       } else {
-        scanPrId = barcodeScanRes;
+        scanCode = barcodeScanRes;
         Navigator.of(context).pop();
-        _loadSingleProduct(scanPrId);
+        _loadSingleProduct(scanCode);
       }
     });
   }
 
-  void _loadSingleProduct(String prid) {
-    String urlLoadJobs = server + "/php/load_products.php";
+  void _loadSingleProduct(String scanCode) {
+    String urlLoadJobs = server + "/php/load_data.php";
     http.post(urlLoadJobs, body: {
-      "prid": prid,
+      "code": scanCode,
     }).then((res) {
       print(res.body);
       if (res.body == "nodata") {
@@ -427,11 +432,11 @@ class _AdminPageState extends State<AdminPage> {
 
     setState(() {
       if (barcodeScanRes == "-1") {
-        scanPrId = "";
+        scanCode = "";
       } else {
-        scanPrId = barcodeScanRes;
+        scanCode = barcodeScanRes;
         Navigator.of(context).pop();
-        _loadSingleProduct(scanPrId);
+        _loadSingleProduct(scanCode);
       }
     });
   }
@@ -463,88 +468,88 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  void _sortItem(String type) {
-    try {
-      ProgressDialog pr = new ProgressDialog(context,
-          type: ProgressDialogType.Normal, isDismissible: true);
-      pr.style(message: "Searching...");
-      pr.show();
-      String urlLoadJobs = server + "/php/load_products.php";
-      http.post(urlLoadJobs, body: {
-        "type": type,
-      }).then((res) {
-        if (res.body == "nodata") {
-          setState(() {
-            curtype = type;
-            titlecenter = "No product found";
-            productdata = null;
-          });
-          pr.dismiss();
-          return;
-        } else {
-          setState(() {
-            curtype = type;
-            var extractdata = json.decode(res.body);
-            productdata = extractdata["products"];
-            FocusScope.of(context).requestFocus(new FocusNode());
-            pr.dismiss();
-          });
-        }
-      }).catchError((err) {
-        print(err);
-        pr.dismiss();
-      });
-      pr.dismiss();
-    } catch (e) {
-      Toast.show("Error", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    }
-  }
+  // void _sortItem(String type) {
+  //   try {
+  //     ProgressDialog pr = new ProgressDialog(context,
+  //         type: ProgressDialogType.Normal, isDismissible: true);
+  //     pr.style(message: "Searching...");
+  //     pr.show();
+  //     String urlLoadJobs = server + "/php/load_products.php";
+  //     http.post(urlLoadJobs, body: {
+  //       "type": type,
+  //     }).then((res) {
+  //       if (res.body == "nodata") {
+  //         setState(() {
+  //           curtype = type;
+  //           titlecenter = "No product found";
+  //           productdata = null;
+  //         });
+  //         pr.dismiss();
+  //         return;
+  //       } else {
+  //         setState(() {
+  //           curtype = type;
+  //           var extractdata = json.decode(res.body);
+  //           productdata = extractdata["products"];
+  //           FocusScope.of(context).requestFocus(new FocusNode());
+  //           pr.dismiss();
+  //         });
+  //       }
+  //     }).catchError((err) {
+  //       print(err);
+  //       pr.dismiss();
+  //     });
+  //     pr.dismiss();
+  //   } catch (e) {
+  //     Toast.show("Error", context,
+  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //   }
+  // }
 
-  void _sortItembyName(String prname) {
-    try {
-      print(prname);
-      ProgressDialog pr = new ProgressDialog(context,
-          type: ProgressDialogType.Normal, isDismissible: true);
-      pr.style(message: "Searching...");
-      pr.show();
-      String urlLoadJobs = server + "/php/load_products.php";
-      http
-          .post(urlLoadJobs, body: {
-            "name": prname.toString(),
-          })
-          .timeout(const Duration(seconds: 4))
-          .then((res) {
-            if (res.body == "nodata") {
-              Toast.show("Product not found", context,
-                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-              pr.dismiss();
-              FocusScope.of(context).requestFocus(new FocusNode());
-              return;
-            }
-            setState(() {
-              var extractdata = json.decode(res.body);
-              productdata = extractdata["products"];
-              FocusScope.of(context).requestFocus(new FocusNode());
-              curtype = prname;
-              pr.dismiss();
-            });
-          })
-          .catchError((err) {
-            pr.dismiss();
-          });
-      pr.dismiss();
-    } on TimeoutException catch (_) {
-      Toast.show("Time out", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    } on SocketException catch (_) {
-      Toast.show("Time out", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    } catch (e) {
-      Toast.show("Error", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    }
-  }
+  // void _sortItembyName(String prname) {
+  //   try {
+  //     print(prname);
+  //     ProgressDialog pr = new ProgressDialog(context,
+  //         type: ProgressDialogType.Normal, isDismissible: true);
+  //     pr.style(message: "Searching...");
+  //     pr.show();
+  //     String urlLoadJobs = server + "/php/load_products.php";
+  //     http
+  //         .post(urlLoadJobs, body: {
+  //           "name": prname.toString(),
+  //         })
+  //         .timeout(const Duration(seconds: 4))
+  //         .then((res) {
+  //           if (res.body == "nodata") {
+  //             Toast.show("Product not found", context,
+  //                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //             pr.dismiss();
+  //             FocusScope.of(context).requestFocus(new FocusNode());
+  //             return;
+  //           }
+  //           setState(() {
+  //             var extractdata = json.decode(res.body);
+  //             productdata = extractdata["products"];
+  //             FocusScope.of(context).requestFocus(new FocusNode());
+  //             curtype = prname;
+  //             pr.dismiss();
+  //           });
+  //         })
+  //         .catchError((err) {
+  //           pr.dismiss();
+  //         });
+  //     pr.dismiss();
+  //   } on TimeoutException catch (_) {
+  //     Toast.show("Time out", context,
+  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //   } on SocketException catch (_) {
+  //     Toast.show("Time out", context,
+  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //   } catch (e) {
+  //     Toast.show("Error", context,
+  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  //   }
+  // }
 
   gotoCart() {
     if (widget.user.email == "unregistered") {
@@ -569,7 +574,7 @@ class _AdminPageState extends State<AdminPage> {
         code: productdata[index]['codeno'],
       brand: productdata[index]['brand'],
       model:productdata[index]['model'],
-      processor: productdata[index]['procecssor'],
+      processor: productdata[index]['processor'],
       osystem: productdata[index]['osystem'],
       graphic: productdata[index]['graphic'],
       ram: productdata[index]['ram'],
@@ -637,32 +642,35 @@ class _AdminPageState extends State<AdminPage> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           title: new Text(
-            "Delete Product Id " + productdata[index]['id'],
+            "Delete laptop " + productdata[index]['model'],
             style: TextStyle(
               color: Colors.white,
             ),
           ),
           content:
-              new Text("Are you sure?", style: TextStyle(color: Colors.white)),
+              new Text("Are you sure?", style: TextStyle(color: Colors.black)),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text(
                 "Yes",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {
+                print("1");
                 Navigator.of(context).pop();
+                print("2 $index");
                 _deleteProduct(index);
+                print("3");
               },
             ),
             new FlatButton(
               child: new Text(
                 "No",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {
@@ -680,10 +688,10 @@ class _AdminPageState extends State<AdminPage> {
         type: ProgressDialogType.Normal, isDismissible: false);
     pr.style(message: "Deleting product...");
     pr.show();
-    String prid = productdata[index]['id'];
-    print("prid:" + prid);
+    String scanCode = productdata[index]['codeno'];
+    print("scanCode:" + scanCode);
     http.post(server + "/php/delete_product.php", body: {
-      "prodid": prid,
+      "codeno": scanCode,
     }).then((res) {
       print(res.body);
       pr.dismiss();
@@ -691,7 +699,8 @@ class _AdminPageState extends State<AdminPage> {
         Toast.show("Delete success", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         _loadData();
-        Navigator.of(context).pop();
+        
+        // Navigator.of(context).pop();
       } else {
         Toast.show("Delete failed", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -996,5 +1005,13 @@ class _AdminPageState extends State<AdminPage> {
           ),
         ) ??
         false;
+  }
+
+  
+  Future<Null> refreshList() async {
+    await Future.delayed(Duration(seconds: 2));
+    //_getLocation();
+    _loadData();
+    return null;
   }
 }

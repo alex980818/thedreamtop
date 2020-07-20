@@ -44,23 +44,12 @@ class _EditProductState extends State<EditProduct> {
   bool _takepicture = true;
   bool _takepicturelocal = false;
   String selectedType;
-  List<String> listType = [
-    "Drink",
-    "Canned Food",
-    "Grocery",
-    "Baby",
-    "Household",
-    "Pet",
-    "Vegetable",
-    "Meat",
-    "Bread",
-    "Other",
-  ];
+  List<String> listType = ["Asus", "Acer", "Lenovo", "HP"];
 
   @override
   void initState() {
     super.initState();
-    print("edit Product");
+    //print("edit Product"+widget.product.processor);
     codeEditingController.text = widget.product.code;
     brandEditingController.text = widget.product.brand;
     modelEditingController.text = widget.product.model;
@@ -102,10 +91,11 @@ class _EditProductState extends State<EditProduct> {
                       child: Container(
                         height: screenHeight / 4,
                         width: screenWidth / 2,
+                        
                         child: CachedNetworkImage(
                           fit: BoxFit.fill,
                           imageUrl: server +
-                              "/productimage/${widget.product.code}.png",
+                              "/productimage/${widget.product.code}.jpg",
                           placeholder: (context, url) =>
                               new CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>
@@ -150,7 +140,7 @@ class _EditProductState extends State<EditProduct> {
                                       child: Container(
                                           alignment: Alignment.centerLeft,
                                           height: 30,
-                                          child: Text("ID Produk",
+                                          child: Text("Product Code",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
@@ -175,7 +165,52 @@ class _EditProductState extends State<EditProduct> {
                                       child: Container(
                                           alignment: Alignment.centerLeft,
                                           height: 30,
-                                          child: Text("Product Brand",
+                                          child: Text("Brand",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black))),
+                                    ),
+                                    TableCell(
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                        height: 40,
+                                        child: Container(
+                                          height: 40,
+                                          child: DropdownButton(
+                                            //sorting dropdownoption
+                                            hint: Text(
+                                              brandEditingController.text,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ), // Not necessary for Option 1
+                                        
+                                            value: selectedType=brandEditingController.text,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                selectedType = newValue;
+                                                print(selectedType);
+                                              });
+                                            },
+                                            items: listType.map((selectedType) {
+                                              return DropdownMenuItem(
+                                                child: new Text(selectedType,
+                                                    style: TextStyle(
+                                                        color: Colors.black)),
+                                                value: selectedType,
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  TableRow(children: [
+                                    TableCell(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: 30,
+                                          child: Text("Model",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
@@ -187,9 +222,228 @@ class _EditProductState extends State<EditProduct> {
                                         height: 30,
                                         child: TextFormField(
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.black,
                                             ),
-                                            controller: codeEditingController,
+                                            controller: modelEditingController,
+                                            keyboardType: TextInputType.text,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            onFieldSubmitted: (v) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(focus0);
+                                            },
+                                            decoration: new InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(5),
+                                              fillColor: Colors.black,
+                                              border: new OutlineInputBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        5.0),
+                                                borderSide: new BorderSide(),
+                                              ),
+
+                                              //fillColor: Colors.green
+                                            )),
+                                      ),
+                                    ),
+                                  ]),
+                                  TableRow(children: [
+                                    TableCell(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: 30,
+                                          child: Text("Processor",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ))),
+                                    ),
+                                    TableCell(
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                        height: 30,
+                                        child: TextFormField(
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            controller:
+                                                processorEditingController,
+                                            keyboardType: TextInputType.text,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            onFieldSubmitted: (v) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(focus0);
+                                            },
+                                            decoration: new InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(5),
+                                              fillColor: Colors.black,
+                                              border: new OutlineInputBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        5.0),
+                                                borderSide: new BorderSide(),
+                                              ),
+
+                                              //fillColor: Colors.green
+                                            )),
+                                      ),
+                                    ),
+                                  ]),
+                                  TableRow(children: [
+                                    TableCell(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: 30,
+                                          child: Text("Operating System",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ))),
+                                    ),
+                                    TableCell(
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                        height: 30,
+                                        child: TextFormField(
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            controller:
+                                                osystemEditingController,
+                                            keyboardType: TextInputType.text,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            onFieldSubmitted: (v) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(focus0);
+                                            },
+                                            decoration: new InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(5),
+                                              fillColor: Colors.black,
+                                              border: new OutlineInputBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        5.0),
+                                                borderSide: new BorderSide(),
+                                              ),
+
+                                              //fillColor: Colors.green
+                                            )),
+                                      ),
+                                    ),
+                                  ]),
+                                  TableRow(children: [
+                                    TableCell(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: 30,
+                                          child: Text("Graphic",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ))),
+                                    ),
+                                    TableCell(
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                        height: 30,
+                                        child: TextFormField(
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            controller:
+                                                graphicEditingController,
+                                            keyboardType: TextInputType.text,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            onFieldSubmitted: (v) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(focus0);
+                                            },
+                                            decoration: new InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(5),
+                                              fillColor: Colors.black,
+                                              border: new OutlineInputBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        5.0),
+                                                borderSide: new BorderSide(),
+                                              ),
+
+                                              //fillColor: Colors.green
+                                            )),
+                                      ),
+                                    ),
+                                  ]),
+                                  TableRow(children: [
+                                    TableCell(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: 30,
+                                          child: Text("Ram",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ))),
+                                    ),
+                                    TableCell(
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                        height: 30,
+                                        child: TextFormField(
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            controller: ramEditingController,
+                                            keyboardType: TextInputType.text,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            onFieldSubmitted: (v) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(focus0);
+                                            },
+                                            decoration: new InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(5),
+                                              fillColor: Colors.black,
+                                              border: new OutlineInputBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        5.0),
+                                                borderSide: new BorderSide(),
+                                              ),
+
+                                              //fillColor: Colors.green
+                                            )),
+                                      ),
+                                    ),
+                                  ]),
+                                  TableRow(children: [
+                                    TableCell(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          height: 30,
+                                          child: Text("Storage",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ))),
+                                    ),
+                                    TableCell(
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                        height: 30,
+                                        child: TextFormField(
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            controller:
+                                                storageEditingController,
                                             keyboardType: TextInputType.text,
                                             textInputAction:
                                                 TextInputAction.next,
@@ -220,8 +474,9 @@ class _EditProductState extends State<EditProduct> {
                                           height: 30,
                                           child: Text("Price (RM)",
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black))),
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ))),
                                     ),
                                     TableCell(
                                       child: Container(
@@ -229,18 +484,19 @@ class _EditProductState extends State<EditProduct> {
                                         height: 30,
                                         child: TextFormField(
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.black,
                                             ),
                                             controller: priceEditingController,
                                             keyboardType: TextInputType.number,
                                             textInputAction:
                                                 TextInputAction.next,
-                                            focusNode: focus0,
                                             onFieldSubmitted: (v) {
                                               FocusScope.of(context)
-                                                  .requestFocus(focus1);
+                                                  .requestFocus(focus0);
                                             },
                                             decoration: new InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(5),
                                               fillColor: Colors.black,
                                               border: new OutlineInputBorder(
                                                 borderRadius:
@@ -248,6 +504,7 @@ class _EditProductState extends State<EditProduct> {
                                                         5.0),
                                                 borderSide: new BorderSide(),
                                               ),
+
                                               //fillColor: Colors.green
                                             )),
                                       ),
@@ -260,8 +517,9 @@ class _EditProductState extends State<EditProduct> {
                                           height: 30,
                                           child: Text("Quantity",
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black))),
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ))),
                                     ),
                                     TableCell(
                                       child: Container(
@@ -271,16 +529,18 @@ class _EditProductState extends State<EditProduct> {
                                             style: TextStyle(
                                               color: Colors.black,
                                             ),
-                                            controller: quantityEditingController,
+                                            controller:
+                                                quantityEditingController,
                                             keyboardType: TextInputType.number,
                                             textInputAction:
                                                 TextInputAction.next,
-                                            focusNode: focus1,
                                             onFieldSubmitted: (v) {
                                               FocusScope.of(context)
-                                                  .requestFocus(focus2);
+                                                  .requestFocus(focus0);
                                             },
                                             decoration: new InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(5),
                                               fillColor: Colors.black,
                                               border: new OutlineInputBorder(
                                                 borderRadius:
@@ -288,95 +548,7 @@ class _EditProductState extends State<EditProduct> {
                                                         5.0),
                                                 borderSide: new BorderSide(),
                                               ),
-                                              //fillColor: Colors.green
-                                            )),
-                                      ),
-                                    ),
-                                  ]),
-                                  TableRow(children: [
-                                    TableCell(
-                                      child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          height: 30,
-                                          child: Text("Type",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black))),
-                                    ),
-                                    TableCell(
-                                      child: Container(
-                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
-                                        height: 40,
-                                        child: Container(
-                                          height: 40,
-                                          child: DropdownButton(
-                                            //sorting dropdownoption
-                                            hint: Text(
-                                              'Type',
-                                              style: TextStyle(
-                                                color: Color.fromRGBO(
-                                                    101, 255, 218, 50),
-                                              ),
-                                            ), // Not necessary for Option 1
-                                            value: selectedType,
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                selectedType = newValue;
-                                                print(selectedType);
-                                              });
-                                            },
-                                            items: listType.map((selectedType) {
-                                              return DropdownMenuItem(
-                                                child: new Text(selectedType,
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            101,
-                                                            255,
-                                                            218,
-                                                            50))),
-                                                value: selectedType,
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ]),
-                                  TableRow(children: [
-                                    TableCell(
-                                      child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          height: 30,
-                                          child: Text("Weigth (gram)",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white))),
-                                    ),
-                                    TableCell(
-                                      child: Container(
-                                        margin: EdgeInsets.fromLTRB(5, 1, 5, 1),
-                                        height: 30,
-                                        child: TextFormField(
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            controller: modelEditingController,
-                                            keyboardType: TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            focusNode: focus2,
-                                            onFieldSubmitted: (v) {
-                                              FocusScope.of(context)
-                                                  .requestFocus(focus3);
-                                            },
-                                            decoration: new InputDecoration(
-                                              fillColor: Colors.black,
-                                              border: new OutlineInputBorder(
-                                                borderRadius:
-                                                    new BorderRadius.circular(
-                                                        5.0),
-                                                borderSide: new BorderSide(),
-                                              ),
+
                                               //fillColor: Colors.green
                                             )),
                                       ),
@@ -397,7 +569,6 @@ class _EditProductState extends State<EditProduct> {
                             ),
                           ],
                         )))),
-                        
           ],
         )),
       ),
@@ -454,14 +625,14 @@ class _EditProductState extends State<EditProduct> {
           //   ),
           // ),
           content:
-              new Text("Are you sure?", style: TextStyle(color: Colors.white)),
+              new Text("Are you sure?", style: TextStyle(color: Colors.black)),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text(
                 "Yes",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {
@@ -473,7 +644,7 @@ class _EditProductState extends State<EditProduct> {
               child: new Text(
                 "No",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               ),
               onPressed: () {
@@ -487,44 +658,71 @@ class _EditProductState extends State<EditProduct> {
   }
 
   updateProduct() {
-    if (brandEditingController.text.length < 4) {
-      Toast.show("Please enter product name", context,
+    if (modelEditingController.text.length < 1) {
+      Toast.show("Please enter model", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-    if (quantityEditingController.text.length < 1) {
-      Toast.show("Please enter product quantity", context,
+    if (processorEditingController.text.length < 1) {
+      Toast.show("Please enter processor", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
+    if (osystemEditingController.text.length < 1) {
+      Toast.show("Please enter operating system", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
+    if (graphicEditingController.text.length < 1) {
+      Toast.show("Please enter graphic", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
+    if (ramEditingController.text.length < 1) {
+      Toast.show("Please enter ram", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
+    if (storageEditingController.text.length < 1) {
+      Toast.show("Please enter storage", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
     if (priceEditingController.text.length < 1) {
-      Toast.show("Please enter product price", context,
+      Toast.show("Please enter price", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-    if (modelEditingController.text.length < 1) {
-      Toast.show("Please enter product weight", context,
+    if (quantityEditingController.text.length < 1) {
+      Toast.show("Please enter quantity", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-    double price = double.parse(priceEditingController.text);
-    double weigth = double.parse(codeEditingController.text);
+
+    // double price = double.parse(priceEditingController.text);
+    // double weigth = double.parse(codeEditingController.text);
 
     ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
     pr.style(message: "Updating product...");
     pr.show();
     String base64Image;
+    
 
     if (_image != null) {
+      print("update 1");
       base64Image = base64Encode(_image.readAsBytesSync());
       http.post(server + "/php/update_product.php", body: {
-        //"prid": widget.product.pid,
-        "prname": modelEditingController.text,
-        "quantity": brandEditingController.text,
-        "price": price.toStringAsFixed(2),
-        "type": codeEditingController.text,
-        "weight": weigth.toStringAsFixed(2),
+        "codeno": codeEditingController.text,
+        "brand": selectedType,
+        "model": modelEditingController.text,
+        "processor": processorEditingController.text,
+        "osystem": osystemEditingController.text,
+        "graphic": graphicEditingController.text,
+        "ram": ramEditingController.text,
+        "storage": storageEditingController.text,
+        "quantity": quantityEditingController.text,
+        "price": priceEditingController.text,
         "encoded_string": base64Image,
       }).then((res) {
         print(res.body);
@@ -542,28 +740,34 @@ class _EditProductState extends State<EditProduct> {
         pr.dismiss();
       });
     } else {
+      print("update 2");
       http.post(server + "/php/update_product.php", body: {
-        // "prid": widget.product.pid,
-        "prname": brandEditingController.text,
+        "codeno": codeEditingController.text,
+        "brand": selectedType,
+        "model": modelEditingController.text,
+        "processor": processorEditingController.text,
+        "osystem": osystemEditingController.text,
+        "graphic": graphicEditingController.text,
+        "ram": ramEditingController.text,
+        "storage": storageEditingController.text,
         "quantity": quantityEditingController.text,
-        "price": price.toStringAsFixed(2),
-        "type": codeEditingController.text,
-        "weight": weigth.toStringAsFixed(2),
-      }).then((res) {
-        print(res.body);
-        pr.dismiss();
-        if (res.body == "success") {
-          Toast.show("Update success", context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-          Navigator.of(context).pop();
-        } else {
-          Toast.show("Update failed", context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        }
-      }).catchError((err) {
-        print(err);
-        pr.dismiss();
-      });
-    }
+        "price": priceEditingController.text,
+      },
+      )..then((res) {
+      print("res = "+res.body);
+      pr.dismiss();
+      if (res.body == "success") {
+        Toast.show("Update success", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Navigator.of(context).pop();
+      } else {
+        Toast.show("Update failed", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+    }).catchError((err) {
+      print("Error = "+err);
+      pr.dismiss();
+    });
+  }
   }
 }

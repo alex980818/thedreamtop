@@ -53,7 +53,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       width: 280,
                       height: 200,
                       child: Image.network(
-                        'http://justforlhdb.com/thedreamtop/productimage/${widget.product.code}.png',
+                        'http://justforlhdb.com/thedreamtop/productimage/${widget.product.code}.jpg',
                       ),
                     ),
                     // SizedBox(
@@ -222,6 +222,15 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   void _addCart() {
+    if (widget.user.email == "unregistered@justforlhdb.com") {
+      Toast.show("Please login to use this function!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }else if (widget.user.email == "admin@justforlhdb.com") {
+      Toast.show("Admin Mode!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     showDialog(
         context: context,
         builder: (context) {

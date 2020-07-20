@@ -23,6 +23,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  GlobalKey<RefreshIndicatorState> refreshKey;
   List productdata;
   double screenHeight, screenWidth;
   bool _visible = false;
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
   int curnumber = 1;
   int _currentIndex = 0;
   int index;
-  bool _isadmin = false;
+  // bool _isadmin = false;
   String curr = "Recent";
   String titlecenter = "Loading products...";
 
@@ -38,9 +39,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _loadData();
-    if (widget.user.email == "admin@grocery.com") {
-      _isadmin = true;
-    }
+    refreshKey = GlobalKey<RefreshIndicatorState>();
+    // if (widget.user.email == "admin@grocery.com") {
+    //   _isadmin = true;
+    // }
   }
 
   @override
@@ -89,7 +91,13 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ],
           ),
-          body: Container(
+          body: RefreshIndicator(
+            key: refreshKey,
+            color: Color.fromRGBO(101, 255, 218, 50),
+            onRefresh: () async {
+              await refreshList();
+            },
+           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -105,9 +113,9 @@ class _MainScreenState extends State<MainScreen> {
                       AssetImage('assets/images/3.jpg'),
                       AssetImage('assets/images/4.jpg'),
                     ],
-                    autoplay: false,
-                    animationCurve: Curves.fastOutSlowIn,
-                    animationDuration: Duration(milliseconds: 1),
+                    autoplay: true,
+                    animationCurve: Curves.easeInToLinear,
+                    animationDuration: Duration(milliseconds: 5000),
                     dotSize: 4.0,
                   ),
                 ),
@@ -169,7 +177,7 @@ class _MainScreenState extends State<MainScreen> {
                                                       image: DecorationImage(
                                                           fit: BoxFit.fill,
                                                           image: NetworkImage(
-                                                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.png")))),
+                                                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.jpg")))),
                                             ),
                                             Column(
                                               mainAxisAlignment:
@@ -219,7 +227,7 @@ class _MainScreenState extends State<MainScreen> {
                             })))
               ],
             ),
-          ),
+          ),),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             type: BottomNavigationBarType.fixed,
@@ -318,7 +326,7 @@ class _MainScreenState extends State<MainScreen> {
                       image: DecorationImage(
                           fit: BoxFit.fill,
                           image: NetworkImage(
-                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.png")))),
+                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.jpg")))),
             ],
           ),
         ));
@@ -669,5 +677,12 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ) ??
         false;
+  }
+
+  Future<Null> refreshList() async {
+    await Future.delayed(Duration(seconds: 2));
+    //_getLocation();
+    _loadData();
+    return null;
   }
 }

@@ -77,7 +77,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   child: CachedNetworkImage(
                                                 fit: BoxFit.scaleDown,
                                                 imageUrl:
-                                                    "http://justforlhdb.com/thedreamtop/productimage/${ _orderdetails[index]['codeno']}.png",
+                                                    "http://justforlhdb.com/thedreamtop/productimage/${ _orderdetails[index]['codeno']}.jpg",
                                                 placeholder: (context, url) =>
                                                     new CircularProgressIndicator(),
                                                 errorWidget:

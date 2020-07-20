@@ -38,6 +38,9 @@ class _CartScreenState extends State<CartScreen> {
   double deliverycharge;
   double amountpayable;
   String titlecenter = "Loading your cart";
+  CameraPosition _home;
+  CameraPosition _userpos;
+  Completer<GoogleMapController> _controller = Completer();
 
   @override
   void initState() {
@@ -116,6 +119,51 @@ class _CartScreenState extends State<CartScreen> {
                                             height: 10,
                                           ),
                                           SizedBox(height: 10),
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Container(
+                                                  // alignment: Alignment.center,
+                                                  height: 20,
+                                                  child: Text(
+                                                      "Current Location:",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black)),
+                                                ),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  height: 30,
+                                                  width: 60,
+                                                  child: FlatButton(
+                                                    color: Colors.blue,
+                                                    onPressed: () =>
+                                                        {_loadMapDialog()},
+                                                    child: Icon(
+                                                      MdiIcons.locationEnter,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]),
+                                          Container(
+                                            width: 150.0,
+                                            height: 100.0,
+                                            child: Text(
+                                              curaddress ?? "Address not set",
+                                              maxLines: 7,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                          Divider(
+                                            height: 2,
+                                            color: Colors.grey,
+                                          ),
                                           Container(
                                               padding: EdgeInsets.fromLTRB(
                                                   50, 0, 50, 0),
@@ -127,6 +175,36 @@ class _CartScreenState extends State<CartScreen> {
                                                     1: FlexColumnWidth(3),
                                                   },
                                                   children: [
+                                                    TableRow(children: [
+                                                      TableCell(
+                                                        child: Container(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            height: 20,
+                                                            child: Text(
+                                                                "Delivery Fee ",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Colors
+                                                                        .black))),
+                                                      ),
+                                                      TableCell(
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          height: 20,
+                                                          child: Text("Free",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .black)),
+                                                        ),
+                                                      ),
+                                                    ]),
                                                     TableRow(children: [
                                                       TableCell(
                                                         child: Container(
@@ -163,6 +241,10 @@ class _CartScreenState extends State<CartScreen> {
                                                       ),
                                                     ]),
                                                   ])),
+                                          Divider(
+                                            height: 2,
+                                            color: Colors.grey,
+                                          ),
                                           SizedBox(
                                             height: 10,
                                           ),
@@ -199,7 +281,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   child: CachedNetworkImage(
                                                 fit: BoxFit.scaleDown,
                                                 imageUrl:
-                                                    "http://justforlhdb.com/thedreamtop/productimage/${cartData[index]['codeno']}.png",
+                                                    "http://justforlhdb.com/thedreamtop/productimage/${cartData[index]['codeno']}.jpg",
                                                 placeholder: (context, url) =>
                                                     new CircularProgressIndicator(),
                                                 errorWidget:
@@ -207,7 +289,6 @@ class _CartScreenState extends State<CartScreen> {
                                                         new Icon(Icons.error),
                                               )),
                                             ),
-                                            
                                           ],
                                         ),
                                         Padding(
@@ -239,6 +320,15 @@ class _CartScreenState extends State<CartScreen> {
                                                             color:
                                                                 Colors.black),
                                                         maxLines: 1,
+                                                      ),
+                                                      Text(
+                                                        "Price per unit: RM " +
+                                                            cartData[index]
+                                                                ['price'] 
+                                                            ,
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                        ),
                                                       ),
                                                       Text(
                                                         "Available " +
@@ -300,24 +390,15 @@ class _CartScreenState extends State<CartScreen> {
                                                                       .blue,
                                                                 ),
                                                               ),
+                                                                
                                                             ],
                                                           )),
                                                       Row(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
+                                                            MainAxisAlignment.end,
+                                                                
                                                         children: <Widget>[
-                                                          Text(
-                                                              "Total RM " +
-                                                                  cartData[index]
-                                                                      [
-                                                                      'yourprice'],
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .black)),
+                                                          
                                                           FlatButton(
                                                             onPressed: () => {
                                                               _deleteCart(index)
@@ -473,7 +554,7 @@ class _CartScreenState extends State<CartScreen> {
               child: Text(
                 "Yes",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               )),
           MaterialButton(
@@ -483,7 +564,7 @@ class _CartScreenState extends State<CartScreen> {
               child: Text(
                 "Cancel",
                 style: TextStyle(
-                  color: Color.fromRGBO(101, 255, 218, 50),
+                  color: Colors.black,
                 ),
               )),
         ],
@@ -495,7 +576,7 @@ class _CartScreenState extends State<CartScreen> {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
     _currentPosition = await geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    //debugPrint('location: ${_currentPosition.latitude}');
+    debugPrint('location: ${_currentPosition.latitude}');
     final coordinates =
         new Coordinates(_currentPosition.latitude, _currentPosition.longitude);
     var addresses =
@@ -585,4 +666,154 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
+
+  _loadMapDialog() {
+    try {
+      if (_currentPosition.latitude == null) {
+        Toast.show("Location not available. Please wait...", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        _getLocation(); //_getCurrentLocation();
+        return;
+      }
+      _controller = Completer();
+      _userpos = CameraPosition(
+        target: LatLng(latitude, longitude),
+        zoom: 14.4746,
+      );
+
+      markers.add(Marker(
+          markerId: markerId1,
+          position: LatLng(latitude, longitude),
+          infoWindow: InfoWindow(
+            title: 'Current Location',
+            snippet: 'Delivery Location',
+          )));
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, newSetState) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                title: Text(
+                  "Select New Delivery Location",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                titlePadding: EdgeInsets.all(5),
+                //content: Text(curaddress),
+                actions: <Widget>[
+                  Text(
+                    curaddress,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  Container(
+                    height: screenHeight / 2 ?? 600,
+                    width: screenWidth ?? 360,
+                    child: GoogleMap(
+                        mapType: MapType.normal,
+                        initialCameraPosition: _userpos,
+                        markers: markers.toSet(),
+                        onMapCreated: (controller) {
+                          _controller.complete(controller);
+                        },
+                        onTap: (newLatLng) {
+                          _loadLoc(newLatLng, newSetState);
+                        }),
+                  ),
+                  MaterialButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    //minWidth: 200,
+                    height: 30,
+                    child: Text('Close'),
+                    color: Color.fromRGBO(101, 255, 218, 50),
+                    textColor: Colors.black,
+                    elevation: 10,
+                    onPressed: () =>
+                        {markers.clear(), Navigator.of(context).pop(false)},
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  void _loadLoc(LatLng loc, newSetState) async {
+    newSetState(() {
+      print("insetstate");
+      markers.clear();
+      latitude = loc.latitude;
+      longitude = loc.longitude;
+      _getLocationfromlatlng(latitude, longitude, newSetState);
+      _home = CameraPosition(
+        target: loc,
+        zoom: 14,
+      );
+      markers.add(Marker(
+          markerId: markerId1,
+          position: LatLng(latitude, longitude),
+          infoWindow: InfoWindow(
+            title: 'New Location',
+            snippet: 'New Delivery Location',
+          )));
+    });
+    _userpos = CameraPosition(
+      target: LatLng(latitude, longitude),
+      zoom: 14.4746,
+    );
+    _newhomeLocation();
+  }
+
+  _getLocationfromlatlng(double lat, double lng, newSetState) async {
+    final Geolocator geolocator = Geolocator()
+      ..placemarkFromCoordinates(lat, lng);
+    _currentPosition = await geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    //debugPrint('location: ${_currentPosition.latitude}');
+    final coordinates = new Coordinates(lat, lng);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first = addresses.first;
+    newSetState(() {
+      curaddress = first.addressLine;
+      if (curaddress != null) {
+        latitude = _currentPosition.latitude;
+        longitude = _currentPosition.longitude;
+        return;
+      }
+    });
+    setState(() {
+      curaddress = first.addressLine;
+      if (curaddress != null) {
+        latitude = _currentPosition.latitude;
+        longitude = _currentPosition.longitude;
+        return;
+      }
+    });
+
+    print("${first.featureName} : ${first.addressLine}");
+  }
+
+  Future<void> _newhomeLocation() async {
+    gmcontroller = await _controller.future;
+    gmcontroller.animateCamera(CameraUpdate.newCameraPosition(_home));
+    //Navigator.of(context).pop(false);
+    //_loadMapDialog();
+  }
+
+
+
+  
 }
