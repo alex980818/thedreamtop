@@ -468,88 +468,6 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  // void _sortItem(String type) {
-  //   try {
-  //     ProgressDialog pr = new ProgressDialog(context,
-  //         type: ProgressDialogType.Normal, isDismissible: true);
-  //     pr.style(message: "Searching...");
-  //     pr.show();
-  //     String urlLoadJobs = server + "/php/load_products.php";
-  //     http.post(urlLoadJobs, body: {
-  //       "type": type,
-  //     }).then((res) {
-  //       if (res.body == "nodata") {
-  //         setState(() {
-  //           curtype = type;
-  //           titlecenter = "No product found";
-  //           productdata = null;
-  //         });
-  //         pr.dismiss();
-  //         return;
-  //       } else {
-  //         setState(() {
-  //           curtype = type;
-  //           var extractdata = json.decode(res.body);
-  //           productdata = extractdata["products"];
-  //           FocusScope.of(context).requestFocus(new FocusNode());
-  //           pr.dismiss();
-  //         });
-  //       }
-  //     }).catchError((err) {
-  //       print(err);
-  //       pr.dismiss();
-  //     });
-  //     pr.dismiss();
-  //   } catch (e) {
-  //     Toast.show("Error", context,
-  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //   }
-  // }
-
-  // void _sortItembyName(String prname) {
-  //   try {
-  //     print(prname);
-  //     ProgressDialog pr = new ProgressDialog(context,
-  //         type: ProgressDialogType.Normal, isDismissible: true);
-  //     pr.style(message: "Searching...");
-  //     pr.show();
-  //     String urlLoadJobs = server + "/php/load_products.php";
-  //     http
-  //         .post(urlLoadJobs, body: {
-  //           "name": prname.toString(),
-  //         })
-  //         .timeout(const Duration(seconds: 4))
-  //         .then((res) {
-  //           if (res.body == "nodata") {
-  //             Toast.show("Product not found", context,
-  //                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //             pr.dismiss();
-  //             FocusScope.of(context).requestFocus(new FocusNode());
-  //             return;
-  //           }
-  //           setState(() {
-  //             var extractdata = json.decode(res.body);
-  //             productdata = extractdata["products"];
-  //             FocusScope.of(context).requestFocus(new FocusNode());
-  //             curtype = prname;
-  //             pr.dismiss();
-  //           });
-  //         })
-  //         .catchError((err) {
-  //           pr.dismiss();
-  //         });
-  //     pr.dismiss();
-  //   } on TimeoutException catch (_) {
-  //     Toast.show("Time out", context,
-  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //   } on SocketException catch (_) {
-  //     Toast.show("Time out", context,
-  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //   } catch (e) {
-  //     Toast.show("Error", context,
-  //         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //   }
-  // }
 
   gotoCart() {
     if (widget.user.email == "unregistered") {
@@ -976,7 +894,7 @@ class _AdminPageState extends State<AdminPage> {
                       image: DecorationImage(
                           fit: BoxFit.fill,
                           image: NetworkImage(
-                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.png")))),
+                              "http://justforlhdb.com/thedreamtop/productimage/${productdata[index]['codeno']}.jpg")))),
             ],
           ),
         ));

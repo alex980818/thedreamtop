@@ -380,58 +380,7 @@ class _ProductDetailState extends State<ProductDetail> {
     }
   }
 
-  //  void _addtoCart() {
-  //       try {
-  //         int cquantity = int.parse(widget.product.quantity);
-  //         print("cartquantity = $cquantity");
-  //         print("quantity = $quantity");
-  //         print("product code = "+widget.product.code);
-  //         print("email = "+widget.user.email);
-  //         if (cquantity > 0) {
-  //           ProgressDialog pr = new ProgressDialog(context,
-  //               type: ProgressDialogType.Normal, isDismissible: true);
-  //           pr.style(message: "Add to cart...");
-  //           pr.show();
-  //           String urlLoadJobs =
-  //               "http://justforlhdb.com/thedreamtop/php/insert_product.php";
-  //           http.post(urlLoadJobs, body: {
-  //             "email": widget.user.email,
-  //             "codeno": widget.product.code,
-  //             "quantity": quantity.toString(),
-  //           }).then((res) {
-  //             //print("res.body = "+res.body);
-  //             if (res.body == "failed") {
-  //               Toast.show("Failed add to cart", context,
-  //                   duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //               print(res.body);
-  //               pr.dismiss();
-  //               return;
-  //             } else {
-  //               List respond = res.body.split(",");
-  //               setState(() {
-  //                 cartquantity = respond[0];
-  //                 widget.user.quantity = cartquantity;
-  //               });
-  //               Toast.show("Success add to cart", context,
-  //                   duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //               print("resbody = "+res.body);
-  //             }
-  //             pr.dismiss();
-  //           }).catchError((err) {
-  //             print(err);
-  //             pr.dismiss();
-  //           });
-  //           pr.dismiss();
-  //         } else {
-  //           Toast.show("Out of stock", context,
-  //               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //         }
-  //       } catch (e) {
-  //         Toast.show("Failed add to cart", context,
-  //             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-  //       }
 
-  // }
 
   Future<bool> _onBackPressAppBar() async {
     Navigator.pop(

@@ -12,6 +12,7 @@ if ($conn->query($sqlinsert) === true)
 {
     sendEmail($email);
     echo "success";
+    
 }
 else
 {

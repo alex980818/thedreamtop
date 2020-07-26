@@ -181,160 +181,102 @@ class _ProfileScreenState extends State<ProfileScreen> {
             )),
           ],
         ),
-        // Card(
-        //   elevation: 10,
-        //   child: GestureDetector(
-        //                   onTap: _takePicture,
-        //                   child: Container(
-        //                     // height: screenHeight / 4.8,
-        //                     // width: screenWidth / 3.5,
-        //                     height: 100,
-        //                     width: 10,
-        //                     decoration: new BoxDecoration(
-        //                       shape: BoxShape.circle,
-        //                       //border: Border.all(color: Colors.black),
-        //                     ),
-        //                     child: CachedNetworkImage(
-        //                       fit: BoxFit.cover,
-        //                       imageUrl: server +
-        //                           "/profileimage/${widget.user.email}.jpg?",
-        //                       placeholder: (context, url) => new SizedBox(
-        //                           height: 10.0,
-        //                           width: 10.0,
-        //                           child: CircularProgressIndicator()),
-        //                       errorWidget: (context, url, error) =>
-        //                           new Icon(MdiIcons.cameraIris, size: 64.0),
-        //                     ),
-        //                   ),
-        //                 ),
-        //   // child: Column(
-        //   //     mainAxisAlignment: MainAxisAlignment.center,
-        //   //     children: <Widget>[
-        //   //       Image.asset(
-        //   //         'assets/images/personicon.png',
-        //   //         height: 100,
-        //   //         width: 100,
-        //   //       ),
-        //   //       Row(
-        //   //           mainAxisAlignment: MainAxisAlignment.center,
-        //   //           children: <Widget>[
-        //   //             Text(
-        //   //               widget.user.name,
-        //   //               style: TextStyle(fontSize: 20),
-        //   //             ),
-        //   //           ]),
-        //   //     ]),
-        // ),
-        
-          Card(
-            elevation: 0,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: MaterialButton(
-                      height: 50,
-                      onPressed: () {
-                        setState(() {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      PaymentHistoryScreen(
-                                        user: widget.user,
-                                      )));
-                        });
-                      },
-                      child: Text(
-                        'Payment History',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.grey[600],
-                      elevation: 0,
+        Card(
+          elevation: 0,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: MaterialButton(
+                    height: 50,
+                    onPressed: () {
+                      if (widget.user.email == "unregistered@justforlhdb.com") {
+                        Toast.show(
+                            "Please login to use this function!!!", context,
+                            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        return;
+                      } else if (widget.user.email == "admin@justforlhdb.com") {
+                        Toast.show("Admin Mode!!!", context,
+                            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                        return;
+                      }
+                      setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    PaymentHistoryScreen(
+                                      user: widget.user,
+                                    )));
+                      });
+                    },
+                    child: Text(
+                      'Payment History',
+                      style: TextStyle(color: Colors.white),
                     ),
+                    color: Colors.grey[600],
+                    elevation: 0,
                   ),
-                ]),
-          ),
-          Card(
-            elevation: 0,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: MaterialButton(
-                      height: 50,
-                      onPressed: () =>
-                        changeName(),
-                      child: Text(
-                        'Change Your Name',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.grey[600],
-                      elevation: 0,
+                ),
+              ]),
+        ),
+        Card(
+          elevation: 0,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: MaterialButton(
+                    height: 50,
+                    onPressed: () => changeName(),
+                    child: Text(
+                      'Change Your Name',
+                      style: TextStyle(color: Colors.white),
                     ),
+                    color: Colors.grey[600],
+                    elevation: 0,
                   ),
-                ]),
-          ),
-          Card(
-            elevation: 0,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: MaterialButton(
-                      height: 50,
-                      onPressed: () =>
-                        changePassword(),
-                      child: Text(
-                        'Change Your Password',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.grey[600],
-                      elevation: 0,
+                ),
+              ]),
+        ),
+        Card(
+          elevation: 0,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: MaterialButton(
+                    height: 50,
+                    onPressed: () => changePassword(),
+                    child: Text(
+                      'Change Your Password',
+                      style: TextStyle(color: Colors.white),
                     ),
+                    color: Colors.grey[600],
+                    elevation: 0,
                   ),
-                ]),
-          ),
-          Card(
-            elevation: 0,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: MaterialButton(
-                      height: 50,
-                      onPressed: () =>
-                        changePhone(),
-                      child: Text(
-                        'Change Your Phone',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.grey[600],
-                      elevation: 0,
+                ),
+              ]),
+        ),
+        Card(
+          elevation: 0,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: MaterialButton(
+                    height: 50,
+                    onPressed: () => changePhone(),
+                    child: Text(
+                      'Change Your Phone',
+                      style: TextStyle(color: Colors.white),
                     ),
+                    color: Colors.grey[600],
+                    elevation: 0,
                   ),
-                ]),
-          ),
-        
-        //  Card(
-        //   elevation: 0,
-        //   child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: <Widget>[
-        //         Expanded(
-        //           child: MaterialButton(
-        //             height: 50,
-        //             onPressed: () {},
-        //             child: Text(
-        //               'Manage Your Account',
-        //               style: TextStyle(color: Colors.white),
-        //             ),
-        //             color: Colors.blue,
-        //             elevation: 0,
-        //           ),
-        //         ),
-        //       ]),
-        // ),
+                ),
+              ]),
+        ),
         SizedBox(
           height: 10,
         ),
@@ -350,10 +292,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text(
                     "Admin Menu",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold
-                    ),
+                        color: Colors.white,
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 Divider(
@@ -362,7 +303,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             )),
-         SizedBox(
+        SizedBox(
           height: 10,
         ),
         Visibility(
@@ -394,7 +335,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ]),
           ),
         ),
-
         Card(
           elevation: 0,
           child: Row(
@@ -504,11 +444,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _takePicture() async {
-    // if (widget.user.email == "unregistered") {
-    //   Toast.show("Please register to use this function", context,
-    //       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    //   return;
-    // }
+    if (widget.user.email == "unregistered@justforlhdb.com") {
+      Toast.show("Please login to use this function!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    } else if (widget.user.email == "admin@justforlhdb.com") {
+      Toast.show("Admin Mode!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     File _image = await ImagePicker.pickImage(
         source: ImageSource.camera, maxHeight: 400, maxWidth: 300);
     //print(_image.lengthSync());
@@ -577,13 +521,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void changeName() {
-    if (widget.user.email == "unregistered") {
-      Toast.show("Please register to use this function", context,
+    if (widget.user.email == "unregistered@justforlhdb.com") {
+      Toast.show("Please login to use this function!!!", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
-    }
-    if (widget.user.email == "admin@justforlhdb.com") {
-      Toast.show("You are the admin, cannot change the name.", context,
+    } else if (widget.user.email == "admin@justforlhdb.com") {
+      Toast.show("Admin Mode!!!", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
@@ -634,18 +577,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ]);
         });
   }
-   _changeName(String name) {
-    // if (widget.user.email == "unregistered") {
-    //   Toast.show("Please register to use this function", context,
-    //       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    //   return;
-    // }
+
+  _changeName(String name) {
+    if (widget.user.email == "unregistered@justforlhdb.com") {
+      Toast.show("Please login to use this function!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    } else if (widget.user.email == "admin@justforlhdb.com") {
+      Toast.show("Admin Mode!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
+
     if (name == "" || name == null) {
       Toast.show("Please enter your new name", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-    
+
     http.post(server + "/php/update_profile.php", body: {
       "email": widget.user.email,
       "name": name,
@@ -667,11 +616,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void changePassword() {
-    // if (widget.user.email == "unregistered") {
-    //   Toast.show("Please register to use this function", context,
-    //       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    //   return;
-    // }
+    if (widget.user.email == "unregistered@justforlhdb.com") {
+      Toast.show("Please login to use this function!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    } else if (widget.user.email == "admin@justforlhdb.com") {
+      Toast.show("Admin Mode!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     TextEditingController passController = TextEditingController();
     TextEditingController pass2Controller = TextEditingController();
     showDialog(
@@ -767,12 +720,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-   void changePhone() {
-    // if (widget.user.email == "unregistered") {
-    //   Toast.show("Please register to use this function", context,
-    //       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    //   return;
-    // }
+  void changePhone() {
+    if (widget.user.email == "unregistered@justforlhdb.com") {
+      Toast.show("Please login to use this function!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    } else if (widget.user.email == "admin@justforlhdb.com") {
+      Toast.show("Admin Mode!!!", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     TextEditingController phoneController = TextEditingController();
     showDialog(
         context: context,
@@ -822,7 +779,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
   }
 
-    _changePhone(String phone) {
+  _changePhone(String phone) {
     if (phone == "" || phone == null || phone.length < 9) {
       Toast.show("Please enter your new phone number", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);

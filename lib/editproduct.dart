@@ -7,6 +7,7 @@ import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'product.dart';
 import 'user.dart';
 
@@ -728,6 +729,10 @@ class _EditProductState extends State<EditProduct> {
         print(res.body);
         pr.dismiss();
         if (res.body == "success") {
+          setState(() {
+            DefaultCacheManager manager = new DefaultCacheManager();
+            manager.emptyCache();
+            });
           Toast.show("Update success", context,
               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           Navigator.of(context).pop();
